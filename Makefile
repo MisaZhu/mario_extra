@@ -4,7 +4,7 @@ endif
 
 
 ifeq ($(MARIO_JS),)
-MARIO_JS = ../../mario_js
+MARIO_JS = ../mario_js
 endif
 
 CC := $(CROSS_COMPILE)g++

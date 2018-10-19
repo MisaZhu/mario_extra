@@ -38,7 +38,8 @@ LDFLAGS += -lpthread
 
 CFLAGS =  $(CXXFLAGS)
 
-TARGET=native_ev3.so
+NAME=lego_ev3
+TARGET=native_$(NAME).so
 INST_DST=/usr/local/mario
 
 all: $(OBJS)
@@ -50,5 +51,5 @@ clean:
 install:
 	mkdir -p $(INST_DST)/libs
 	cp $(TARGET) $(INST_DST)/libs
-	mkdir -p $(INST_DST)/test.js
-	cp test.js/* $(INST_DST)/test.js
+	mkdir -p $(INST_DST)/test.js/$(NAME)
+	cp test.js/* $(INST_DST)/test.js/$(NAME)

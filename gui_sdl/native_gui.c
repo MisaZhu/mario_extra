@@ -1,4 +1,4 @@
-#include "mario_js.h"
+#include "mario_vm.h"
 #include "sdl/native_sdl.h"
 
 

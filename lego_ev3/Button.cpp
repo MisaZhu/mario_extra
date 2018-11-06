@@ -42,13 +42,13 @@ static void* _buttonThread(void* data) {
     if (rb < sizeof(input_event))
       continue;
 		var_t* v = var_new_obj(NULL, NULL);
-		var_add(v, "type", var_new_int(ev.type));
-		var_add(v, "code", var_new_int(ev.code));
-		var_add(v, "value", var_new_int(ev.value));
+		var_add(vm, v, "type", var_new_int(ev.type));
+		var_add(vm, v, "code", var_new_int(ev.code));
+		var_add(vm, v, "value", var_new_int(ev.value));
 
 		var_t* args = var_new();
-		var_add(args, "", v);
-		interruptByName(vm, obj, "onEvent", args);
+		var_add(vm, args, "", v);
+		interrupt_by_name(vm, obj, "onEvent", args);
   }
 
   return NULL;

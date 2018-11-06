@@ -1,7 +1,7 @@
 #ifndef JSM_JSPort
 #define JSM_JSPort
 
-#include "mario_js.h"
+#include "mario_vm.h"
 
 class JSPort {
 	static var_t* constructor(vm_t* vm, var_t *env, void *);

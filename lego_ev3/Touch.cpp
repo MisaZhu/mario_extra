@@ -14,7 +14,7 @@ static touch_sensor* getTouch(var_t* c) {
 	return m;
 }
 
-static void _destroyTouch(void* p) {
+static void _destroyTouch(void* p, void* extra) {
 	touch_sensor* m = (touch_sensor*)p;
 	if(m == NULL)
 		return;
@@ -32,7 +32,7 @@ var_t* JSTouch::constructor(vm_t* vm, var_t* env, void *) {
 	touch_sensor* m = new touch_sensor(ePort);
 	
 	var_t* v = var_new_obj(m, _destroyTouch);
-	var_add(thisV, "touch", v);
+	var_add(vm, thisV, "touch", v);
 	return thisV;
 }
 

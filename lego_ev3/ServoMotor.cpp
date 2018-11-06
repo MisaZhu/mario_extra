@@ -14,7 +14,7 @@ static servo_motor* getMotor(var_t* c) {
 	return m;
 }
 
-static void _destroyMotor(void* p) {
+static void _destroyMotor(void* p, void* extra) {
 	servo_motor* m = (servo_motor*)p;
 	if(m == NULL)
 		return;
@@ -35,7 +35,7 @@ var_t* JSServoMotor::constructor(vm_t* vm, var_t* env, void *) {
 	servo_motor* m = new servo_motor(ePort);
 	
 	var_t* v = var_new_obj(m, _destroyMotor);
-	var_add(thisV, "motor", v);
+	var_add(vm, thisV, "motor", v);
 	return thisV;
 }
 

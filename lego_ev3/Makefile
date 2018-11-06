@@ -2,17 +2,24 @@ ifeq ($(CROSS_COMPILE),)
 CROSS_COMPILE=arm-none-linux-gnueabi-
 endif
 
-
-ifeq ($(MARIO_JS),)
-MARIO_JS = ../../mario_js
+ifeq ($(MARIO_LANG),)
+MARIO_LANG = js
 endif
+
+ifeq ($(MARIO_VM),)
+MARIO_VM = ../../mario_vm
+endif
+MARIO_COMP = $(MARIO_VM)/compilers/$(MARIO_LANG)
 
 CC := $(CROSS_COMPILE)g++
 CXX := $(CROSS_COMPILE)g++
 AR := $(CROSS_COMPILE)ar
-LD := $(CROSS_COMPILE)gcc
+LD := $(CROSS_COMPILE)g++
 
-OBJS= $(MARIO_JS)/mario_js.o  \
+mario_OBJS= $(MARIO_VM)/mario_utils.o $(MARIO_VM)/mario_bc.o $(MARIO_VM)/mario_vm.o $(MARIO_VM)/mario_lex.o $(MARIO_COMP)/compiler.o
+
+
+OBJS= $(mario_OBJS) \
 	native_ev3.o \
 	Ports.o \
 	Port.o \
@@ -30,7 +37,7 @@ OBJS= $(MARIO_JS)/mario_js.o  \
 	ev3dev.o
 
 
-CXXFLAGS =  -I$(MARIO_JS) -g -Wall -DMARIO_DEBUG -DMARIO_CACHE -fPIC -std=c++0x  -I. -DEV3DEV_PLATFORM=EV3
+CXXFLAGS =  -I$(MARIO_VM) -g -Wall -DMARIO_DEBUG -DMARIO_CACHE -fPIC -std=c++0x  -I. -DEV3DEV_PLATFORM=EV3
 LDFLAGS = -lstdc++
 
 CXXFLAGS +=  -DMARIO_THREAD

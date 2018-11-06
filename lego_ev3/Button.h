@@ -1,7 +1,7 @@
 #ifndef JSM_JSButton
 #define JSM_JSButton
 
-#include "mario_js.h"
+#include "mario_vm.h"
 
 class JSButton {
 	static var_t* run(vm_t* vm, var_t *env, void *);

@@ -1,7 +1,7 @@
 #ifndef JSM_JSServoMotor
 #define JSM_JSServoMotor
 
-#include "mario_js.h"
+#include "mario_vm.h"
 
 class JSServoMotor {
 	static var_t* constructor(vm_t* vm, var_t* env, void *);

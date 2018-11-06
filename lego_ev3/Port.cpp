@@ -15,7 +15,7 @@ static lego_port* getPort(var_t* env) {
 	return p;
 }
 
-static void _destroyPort(void* p) {
+static void _destroyPort(void* p, void* extra) {
 	lego_port* port = (lego_port*)p;
 	if(port == NULL)
 		return;
@@ -33,7 +33,7 @@ var_t* JSPort::constructor(vm_t* vm, var_t *env, void *) {
 	lego_port* p = new lego_port(ePort);
 	
 	var_t* v = var_new_obj(p, _destroyPort);
-	var_add(thisV, "port", v);
+	var_add(vm, thisV, "port", v);
 	return thisV;
 }
 
@@ -96,7 +96,7 @@ var_t* JSPort::modes(vm_t* vm, var_t *env, void *) {
 	var_t* v = var_new_array();
 	for(std::set<std::string>::iterator it=r.begin(); it!=r.end(); ++it) {
 		string i = *it;
-		var_add(v, "", var_new_str(i.c_str()));
+		var_add(vm, v, "", var_new_str(i.c_str()));
 	}
 	return v;
 }

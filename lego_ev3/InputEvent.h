@@ -1,7 +1,7 @@
 #ifndef JSM_JSInputEvent
 #define JSM_JSInputEvent
 
-#include "mario_js.h"
+#include "mario_vm.h"
 
 
 class JSInputEvent {

@@ -15,7 +15,7 @@ static infrared_sensor* getInfrared(var_t* env) {
 	return m;
 }
 
-static void _destroyInfrared(void* p) {
+static void _destroyInfrared(void* p, void* extra) {
 	infrared_sensor* m = (infrared_sensor*)p;
 	if(m == NULL)
 		return;
@@ -35,7 +35,7 @@ var_t* JSInfrared::constructor(vm_t* vm, var_t* env, void *) {
 		m->set_mode(infrared_sensor::mode_ir_prox);
 	
 	var_t* v = var_new_obj(m, _destroyInfrared);
-	var_add(thisV, "infrared", v);
+	var_add(vm, thisV, "infrared", v);
 	return thisV;
 }
 

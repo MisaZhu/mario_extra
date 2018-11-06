@@ -1,7 +1,7 @@
 #ifndef JSM_JSInfrared
 #define JSM_JSInfrared
 
-#include "mario_js.h"
+#include "mario_vm.h"
 
 class JSInfrared {
 	static var_t* constructor(vm_t* vm, var_t* env, void *);

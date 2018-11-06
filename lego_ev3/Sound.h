@@ -1,7 +1,7 @@
 #ifndef JSM_JSSound
 #define JSM_JSSound
 
-#include "mario_js.h"
+#include "mario_vm.h"
 
 class JSSound {
 	static var_t* speak(vm_t* vm, var_t* env, void *);

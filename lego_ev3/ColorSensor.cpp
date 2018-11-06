@@ -14,7 +14,7 @@ static color_sensor* getColor(var_t *c) {
 	return m;
 }
 
-static void _destroyColor(void* p) {
+static void _destroyColor(void* p, void* extra) {
 	color_sensor* m = (color_sensor*)p;
 	if(m == NULL)
 		return;
@@ -32,7 +32,7 @@ var_t* JSColorSensor::constructor(vm_t* vm, var_t* env, void *) {
 	color_sensor* m = new color_sensor(ePort);
 	
 	var_t* v = var_new_obj(m, _destroyColor);
-	var_add(thisV, "color", v);
+	var_add(vm, thisV, "color", v);
 
 	return thisV;
 }
@@ -67,9 +67,9 @@ var_t* JSColorSensor::rgb(vm_t* vm, var_t* env, void *) {
 	if(color->connected())
 		r = color->raw();
 	var_t* v = var_new();
-	var_add(v, "r", var_new_int(std::get<0>(r)));
-	var_add(v, "g", var_new_int(std::get<1>(r)));
-	var_add(v, "b", var_new_int(std::get<2>(r)));
+	var_add(vm, v, "r", var_new_int(std::get<0>(r)));
+	var_add(vm, v, "g", var_new_int(std::get<1>(r)));
+	var_add(vm, v, "b", var_new_int(std::get<2>(r)));
 	
 	return v;
 }

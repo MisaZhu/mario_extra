@@ -1,7 +1,7 @@
 #ifndef JSM_JSPorts
 #define JSM_JSPorts
 
-#include "mario_js.h"
+#include "mario_vm.h"
 #include <string>
 
 class JSPorts {

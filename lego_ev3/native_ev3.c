@@ -1,4 +1,4 @@
-#include "mario_js.h"
+#include "mario_vm.h"
 #include "Ports.h"
 #include "Port.h"
 #include "Sound.h"

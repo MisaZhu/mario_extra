@@ -15,7 +15,7 @@ static motor* getMotor(var_t* env) {
 	return m;
 }
 
-static void _destroyMotor(void* p) {
+static void _destroyMotor(void* p, void* extra) {
 	motor* m = (motor*)p;
 	if(m == NULL)
 		return;
@@ -41,7 +41,7 @@ var_t* JSMotor::constructor(vm_t* vm, var_t* env, void *) {
 		m = new medium_motor(ePort);
 	
 	var_t* v = var_new_obj(m, _destroyMotor);
-	var_add(thisV, "motor", v);
+	var_add(vm, thisV, "motor", v);
 	return thisV;
 }
 

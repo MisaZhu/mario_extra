@@ -1,7 +1,7 @@
 #ifndef JSM_JSUltrasonic
 #define JSM_JSUltrasonic
 
-#include "mario_js.h"
+#include "mario_vm.h"
 
 class JSUltrasonic {
 	static var_t* constructor(vm_t* vm, var_t* env, void *);

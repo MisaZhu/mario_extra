@@ -15,7 +15,7 @@ static ultrasonic_sensor* getUltrasonic(var_t* env) {
 	return m;
 }
 
-static void _destroyUltrasonic(void* p) {
+static void _destroyUltrasonic(void* p, void* extra) {
 	ultrasonic_sensor* m = (ultrasonic_sensor*)p;
 	if(m == NULL)
 		return;
@@ -33,7 +33,7 @@ var_t* JSUltrasonic::constructor(vm_t* vm, var_t* env, void *) {
 	ultrasonic_sensor* m = new ultrasonic_sensor(ePort);
 	
 	var_t* v = var_new_obj(m, _destroyUltrasonic);
-	var_add(thisV, "ultrasonic", v);
+	var_add(vm, thisV, "ultrasonic", v);
 	return thisV;
 }
 

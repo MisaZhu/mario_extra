@@ -7,9 +7,9 @@ MARIO_LANG = js
 endif
 
 ifeq ($(MARIO_VM),)
-MARIO_VM = ../../mario_vm
+MARIO_VM = ../../mario_vm/vm
 endif
-MARIO_COMP = $(MARIO_VM)/compilers/$(MARIO_LANG)
+MARIO_COMP = $(MARIO_VM)/../compilers/$(MARIO_LANG)
 
 CC := $(CROSS_COMPILE)g++
 CXX := $(CROSS_COMPILE)g++

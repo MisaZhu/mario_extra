@@ -14,7 +14,7 @@ static touch_sensor* getTouch(var_t* c) {
 	return m;
 }
 
-static void _destroyTouch(void* p, void* extra) {
+static void _destroyTouch(void* p) {
 	touch_sensor* m = (touch_sensor*)p;
 	if(m == NULL)
 		return;

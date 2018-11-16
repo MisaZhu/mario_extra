@@ -14,7 +14,7 @@ static color_sensor* getColor(var_t *c) {
 	return m;
 }
 
-static void _destroyColor(void* p, void* extra) {
+static void _destroyColor(void* p) {
 	color_sensor* m = (color_sensor*)p;
 	if(m == NULL)
 		return;

@@ -14,7 +14,7 @@ static servo_motor* getMotor(var_t* c) {
 	return m;
 }
 
-static void _destroyMotor(void* p, void* extra) {
+static void _destroyMotor(void* p) {
 	servo_motor* m = (servo_motor*)p;
 	if(m == NULL)
 		return;

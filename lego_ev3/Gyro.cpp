@@ -14,7 +14,7 @@ static gyro_sensor* getGyro(var_t* c) {
 	return m;
 }
 
-static void _destroyGyro(void* p, void* extra) {
+static void _destroyGyro(void* p) {
 	gyro_sensor* m = (gyro_sensor*)p;
 	if(m == NULL)
 		return;

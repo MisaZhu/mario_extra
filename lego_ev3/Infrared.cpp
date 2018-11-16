@@ -15,7 +15,7 @@ static infrared_sensor* getInfrared(var_t* env) {
 	return m;
 }
 
-static void _destroyInfrared(void* p, void* extra) {
+static void _destroyInfrared(void* p) {
 	infrared_sensor* m = (infrared_sensor*)p;
 	if(m == NULL)
 		return;

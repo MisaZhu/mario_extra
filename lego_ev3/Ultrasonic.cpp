@@ -15,7 +15,7 @@ static ultrasonic_sensor* getUltrasonic(var_t* env) {
 	return m;
 }
 
-static void _destroyUltrasonic(void* p, void* extra) {
+static void _destroyUltrasonic(void* p) {
 	ultrasonic_sensor* m = (ultrasonic_sensor*)p;
 	if(m == NULL)
 		return;

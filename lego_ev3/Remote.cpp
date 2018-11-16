@@ -14,7 +14,7 @@ static remote_control* getRemote(var_t* c) {
 	return m;
 }
 
-static void _destroyRemote(void* p, void* extra) {
+static void _destroyRemote(void* p) {
 	remote_control* m = (remote_control*)p;
 	if(m == NULL)
 		return;

@@ -15,7 +15,7 @@ static motor* getMotor(var_t* env) {
 	return m;
 }
 
-static void _destroyMotor(void* p, void* extra) {
+static void _destroyMotor(void* p) {
 	motor* m = (motor*)p;
 	if(m == NULL)
 		return;

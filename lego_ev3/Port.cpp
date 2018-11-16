@@ -15,7 +15,7 @@ static lego_port* getPort(var_t* env) {
 	return p;
 }
 
-static void _destroyPort(void* p, void* extra) {
+static void _destroyPort(void* p) {
 	lego_port* port = (lego_port*)p;
 	if(port == NULL)
 		return;

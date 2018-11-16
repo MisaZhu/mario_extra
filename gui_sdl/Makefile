@@ -24,10 +24,16 @@ GUI_OBJS= $(mario_OBJS) \
 	sdl/native_sdl.o \
 	native_gui.o 
 
-CFLAGS =  -g -I$(MARIO_VM) -Wall -fPIC -DMARIO_DEBUG -DMARIO_CACHE -DMARIO_THREAD
+CFLAGS =  -I$(MARIO_VM) -Wall -fPIC -DMARIO_CACHE -DMARIO_THREAD
 LDFLAGS =  -lm -lpthread
 CFLAGS +=  -I/usr/local/include/SDL2
 LDFLAGS += -L/usr/local/lib -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf
+
+ifneq ($(MARIO_DEBUG), no)
+CFLAGS += -g -DMARIO_DEBUG
+else
+CFLAGS += -O2
+endif
 
 
 GUI=gui

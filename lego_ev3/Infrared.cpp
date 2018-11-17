@@ -35,7 +35,7 @@ var_t* JSInfrared::constructor(vm_t* vm, var_t* env, void *) {
 		m->set_mode(infrared_sensor::mode_ir_prox);
 	
 	var_t* v = var_new_obj(m, _destroyInfrared);
-	var_add(vm, thisV, "infrared", v);
+	var_add(thisV, "infrared", v);
 	return thisV;
 }
 

@@ -31,8 +31,8 @@ static std::function<void(bool)> remoteEvent(vm_t* vm, var_t* thisV, const char*
 		var_t* bt = var_new_str(button);
 		var_t* st = var_new_int(state ? 1:0);
 
-		var_add(vm, args, "", bt);
-		var_add(vm, args, "", st);
+		var_add(args, "", bt);
+		var_add(args, "", st);
 		interrupt_by_name(vm, thisV, "onEvent", args);
 	};
 }
@@ -48,7 +48,7 @@ var_t* JSRemote::constructor(vm_t* vm, var_t* env, void *) {
 	m->on_beacon = remoteEvent(vm, thisV, "BEACON");
 	
 	var_t* v = var_new_obj(m, _destroyRemote);
-	var_add(vm, thisV, "remote", v);
+	var_add(thisV, "remote", v);
 	return thisV;
 }
 

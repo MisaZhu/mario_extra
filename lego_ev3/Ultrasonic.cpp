@@ -33,7 +33,7 @@ var_t* JSUltrasonic::constructor(vm_t* vm, var_t* env, void *) {
 	ultrasonic_sensor* m = new ultrasonic_sensor(ePort);
 	
 	var_t* v = var_new_obj(m, _destroyUltrasonic);
-	var_add(vm, thisV, "ultrasonic", v);
+	var_add(thisV, "ultrasonic", v);
 	return thisV;
 }
 

@@ -33,12 +33,12 @@ var_t* native_sdl_pollEvent(vm_t* vm, var_t* env, void *data) {
 	
 	SDL_PollEvent(&event);
 	var_t* v = var_new_obj(NULL, NULL);
-	var_add(vm, v, "type", var_new_int(event.type));
+	var_add(v, "type", var_new_int(event.type));
 
 	if(event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) { //keyboard event
 		var_t* ke = var_new_obj(NULL, NULL);
-		var_add(vm, ke, "code", var_new_int(event.key.keysym.sym));
-		var_add(vm, v, "keyboard", ke);
+		var_add(ke, "code", var_new_int(event.key.keysym.sym));
+		var_add(v, "keyboard", ke);
 	}
 	return v;
 }
@@ -50,8 +50,8 @@ var_t* native_sdl_getDisplayMode(vm_t* vm, var_t* env, void *data) {
 		return NULL;
 	}
 	var_t* v = var_new_obj(NULL, NULL);
-	var_add(vm, v, "w", var_new_int(current.w));
-	var_add(vm, v, "h", var_new_int(current.h));
+	var_add(v, "w", var_new_int(current.w));
+	var_add(v, "h", var_new_int(current.h));
 	return v;
 }
 
@@ -76,11 +76,11 @@ var_t* native_sdl_createWindow(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_WINDOW, 0);
 	v->value = win;
 	v->free_func = _free_none;//don't destroy win automaticly.
-	var_add(vm, v, "title", var_new_str(title));
-	var_add(vm, v, "x", var_new_int(x));
-	var_add(vm, v, "y", var_new_int(y));
-	var_add(vm, v, "w", var_new_int(w));
-	var_add(vm, v, "h", var_new_int(h));
+	var_add(v, "title", var_new_str(title));
+	var_add(v, "x", var_new_int(x));
+	var_add(v, "y", var_new_int(y));
+	var_add(v, "w", var_new_int(w));
+	var_add(v, "h", var_new_int(h));
 	return v;
 }
 
@@ -143,7 +143,7 @@ var_t* native_font_open(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_FONT, 0);
 	v->value = font;
 	v->free_func = _free_none;
-	var_add(vm, v, "size", var_new_int(size));
+	var_add(v, "size", var_new_int(size));
 	return v;
 }
 
@@ -170,8 +170,8 @@ var_t* native_font_sizeOf(vm_t* vm, var_t* env, void *data) {
 	TTF_SizeUTF8(font, s, &w, &h);
 
 	var_t* v = var_new_obj(NULL, NULL);
-	var_add(vm, v, "w", var_new_int(w));
-	var_add(vm, v, "h", var_new_int(h));
+	var_add(v, "w", var_new_int(w));
+	var_add(v, "h", var_new_int(h));
 	return v;
 }
 
@@ -206,8 +206,8 @@ var_t* native_font_genSurface(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_SURFACE, 0);
 	v->value = surface;
 	v->free_func = _free_none;
-	var_add(vm, v, "w", var_new_int(surface->w));
-	var_add(vm, v, "h", var_new_int(surface->h));
+	var_add(v, "w", var_new_int(surface->w));
+	var_add(v, "h", var_new_int(surface->h));
 	return v;
 }
 
@@ -240,8 +240,8 @@ var_t* native_font_genTexture(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_TEXTURE, 0);
 	v->value = tex;
 	v->free_func = _free_none;
-	var_add(vm, v, "w", var_new_int(surface->w));
-	var_add(vm, v, "h", var_new_int(surface->h));
+	var_add(v, "w", var_new_int(surface->w));
+	var_add(v, "h", var_new_int(surface->h));
 	SDL_FreeSurface(surface);
 	return v;
 }
@@ -262,8 +262,8 @@ var_t* native_surface_genTexture(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_TEXTURE, 0);
 	v->value = tex;
 	v->free_func = _free_none;
-	var_add(vm, v, "w", var_new_int(surface->w));
-	var_add(vm, v, "h", var_new_int(surface->h));
+	var_add(v, "w", var_new_int(surface->w));
+	var_add(v, "h", var_new_int(surface->h));
 	return v;
 }
 
@@ -648,8 +648,8 @@ var_t* native_image_loadSurface(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_SURFACE, 0);
 	v->value = surface;
 	v->free_func = _free_none;
-	var_add(vm, v, "w", var_new_int(surface->w));
-	var_add(vm, v, "h", var_new_int(surface->h));
+	var_add(v, "w", var_new_int(surface->w));
+	var_add(v, "h", var_new_int(surface->h));
 	return v;
 }
 
@@ -674,8 +674,8 @@ var_t* native_image_loadTexture(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_TEXTURE, 0);
 	v->value = tex;
 	v->free_func = _free_none;
-	var_add(vm, v, "w", var_new_int(surface->w));
-	var_add(vm, v, "h", var_new_int(surface->h));
+	var_add(v, "w", var_new_int(surface->w));
+	var_add(v, "h", var_new_int(surface->h));
 	SDL_FreeSurface(surface);
 	return v;
 }
@@ -692,10 +692,10 @@ var_t* native_rect_constructor(vm_t* vm, var_t* env, void* data) {
 	int w = get_int(env, "w");
 	int h = get_int(env, "h");
 	
-	var_add(vm, thisV, "x", var_new_int(x));
-	var_add(vm, thisV, "y", var_new_int(y));
-	var_add(vm, thisV, "w", var_new_int(w));
-	var_add(vm, thisV, "h", var_new_int(h));
+	var_add(thisV, "x", var_new_int(x));
+	var_add(thisV, "y", var_new_int(y));
+	var_add(thisV, "w", var_new_int(w));
+	var_add(thisV, "h", var_new_int(h));
 	return thisV;
 }
 
@@ -709,8 +709,8 @@ var_t* native_size_constructor(vm_t* vm, var_t* env, void* data) {
 	int w = get_int(env, "w");
 	int h = get_int(env, "h");
 	
-	var_add(vm, thisV, "w", var_new_int(w));
-	var_add(vm, thisV, "h", var_new_int(h));
+	var_add(thisV, "w", var_new_int(w));
+	var_add(thisV, "h", var_new_int(h));
 	return thisV;
 }
 
@@ -724,8 +724,8 @@ var_t* native_pos_constructor(vm_t* vm, var_t* env, void* data) {
 	int x = get_int(env, "x");
 	int y = get_int(env, "y");
 	
-	var_add(vm, thisV, "x", var_new_int(x));
-	var_add(vm, thisV, "y", var_new_int(y));
+	var_add(thisV, "x", var_new_int(x));
+	var_add(thisV, "y", var_new_int(y));
 	return thisV;
 }
 

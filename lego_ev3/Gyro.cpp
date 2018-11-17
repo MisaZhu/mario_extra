@@ -32,7 +32,7 @@ var_t* JSGyro::constructor(vm_t* vm, var_t* env, void *) {
 	gyro_sensor* m = new gyro_sensor(ePort);
 	
 	var_t* v = var_new_obj(m, _destroyGyro);
-	var_add(vm, thisV, "gyro", v);
+	var_add(thisV, "gyro", v);
 	return thisV;
 }
 
@@ -58,8 +58,8 @@ var_t* JSGyro::angleAndRate(vm_t* vm, var_t* env, void *) {
 	if(gyro->connected())
 		r = gyro->rate_and_angle();
 	var_t* v = var_new();
-	var_add(vm, v, "angle", var_new_int(std::get<0>(r)));
-	var_add(vm, v, "rate", var_new_int(std::get<1>(r)));
+	var_add(v, "angle", var_new_int(std::get<0>(r)));
+	var_add(v, "rate", var_new_int(std::get<1>(r)));
 
 	return v;
 }

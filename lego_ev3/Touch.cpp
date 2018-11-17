@@ -32,7 +32,7 @@ var_t* JSTouch::constructor(vm_t* vm, var_t* env, void *) {
 	touch_sensor* m = new touch_sensor(ePort);
 	
 	var_t* v = var_new_obj(m, _destroyTouch);
-	var_add(vm, thisV, "touch", v);
+	var_add(thisV, "touch", v);
 	return thisV;
 }
 

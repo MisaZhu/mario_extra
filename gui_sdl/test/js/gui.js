@@ -1,63 +1,69 @@
 SDL.init();
+mode = SDL.getDisplayMode();
 
 Font.init();
-font = Font.open("wqy.ttc", 32);
+font = Font.open("wqy.ttc", 22);
 
-mode = SDL.getDisplayMode();
-console.ln(mode);
-
-w = SDL.createWindow("hello", 10, 10, 800, 600, false);
-canvas = w.getCanvas();
+win = SDL.createWindow("hello", 10, 10, mode.w-100, mode.h-100, false);
+canvas = win.getCanvas();
 
 texImage = Image.loadTexture(canvas, "test.png");
-texFont = font.genTexture(canvas, "Hello, world(中文)!", 0xFF00FF00);
 
-i = 0; 
-while(true) {
-	if(i >= 1500) {
-		canvas.setColor(0x0);
-		canvas.clear();
-		canvas.filledRoundedRectangle(110, 110, 200, 200, 6, 0xFFFF0000);
-		canvas.filledRectangle(10, 10, 100, 100, 0xFFFF0000);
-		canvas.aaline(100, 200, 200, 400, 0xFF00FF00);
+function draw(text) {
+	canvas.setColor(0x0);
+	canvas.clear();
+	let w = texImage.w/3;
+	let h = texImage.h/3;
 
-		x = Math.randInt(100, 300);
-		y = Math.randInt(100, 300);
+	canvas.filledRoundedRectangle(4, h-h/3, win.w-4, h, 6, 0xFFFFFF00);
 
-		canvas.copyTexture(texImage, 
-				new Rect(0, 0, texImage.w, texImage.h), 
-				new Rect(x, y, texImage.w/2, texImage.h/2));
-		canvas.copyTexture(texFont, 
-				new Rect(0, 0, texFont.w, texFont.h),
-				new Rect(x, y+100, texFont.w, texFont.h));
+	canvas.copyTexture(texImage, 
+			new Rect(0, 0, texImage.w, texImage.h), 
+			new Rect(0, 0, texImage.w/3, texImage.h/3));
 
-		canvas.drawText("中文.^()*)!~", 100, 400, font, 0xFF0000FF);
-
-		canvas.refresh();
-		i = 0;
-	}
-	else {
-		i++;
-	}
-
-	ev = Event.pollEvent();
-	if(ev.type == Event.QUIT)
-		break;
-
-	if(ev.type == Event.KEY_UP) {
-		if(ev.keyboard.code == 27)
-			break;
-	}
-	System.usleep(50);
+	canvas.drawText(":>" + text, 4, win.h - 30, font, 0xFF00FF00);
+	canvas.refresh();
 }
 
+let text = "";
 
-texImage.destroy();
-texFont.destroy();
-canvas.destroy();
-w.destroy();
+Event.setTextInputRect(new Rect(20, win.h-50, 200, 200));
+while(true) {
+	ev = Event.pollEvent();
+	if(ev.type == Event.NONE)
+		continue;
+
+	if(ev.type == Event.QUIT) {
+		break;
+	}
+	else if(ev.type == Event.KEY_UP) {
+		if(ev.keyboard.code == 27) {
+			break;
+		}
+		else if(ev.keyboard.code == 13) {
+			if(text == "exit")
+				break;
+			text = "";
+		}
+	}
+	else if(ev.type == Event.KEY_DOWN) {
+		if(ev.keyboard.code == 8) {
+			let len = text.length();
+			if(len > 0) 
+				text = text.substr(0, len-1);
+		}
+	}
+	else if(ev.type == Event.TEXT_INPUT) {
+		text = text + ev.text.text;
+	}
+
+	draw(text);
+}
 
 font.close();
-Font.quit();
+texImage.destroy();
+canvas.destroy();
+win.destroy();
 
+Font.quit();
 SDL.quit();

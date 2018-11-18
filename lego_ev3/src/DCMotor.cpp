@@ -95,7 +95,7 @@ var_t* JSDCMotor::polarity(vm_t* vm, var_t* env, void *) {
 	std::string p = "";
 	if(motor->connected()) 
 		p = motor->polarity();
-	return var_new_str(p.c_str());
+	return var_new_str(vm, p.c_str());
 }
 
 var_t* JSDCMotor::dutyCycle(vm_t* vm, var_t* env, void *) {

@@ -42,7 +42,7 @@ var_t* JSPort::address(vm_t* vm, var_t *env, void *) {
 	string r = "";
 	if(port->connected())
 		r = port->address();
-	return var_new_str(r.c_str());
+	return var_new_str(vm, r.c_str());
 }
 
 var_t* JSPort::mode(vm_t* vm, var_t *env, void *) {
@@ -50,7 +50,7 @@ var_t* JSPort::mode(vm_t* vm, var_t *env, void *) {
 	string r = "";
 	if(port->connected())
 		r = port->mode();
-	return var_new_str(r.c_str());
+	return var_new_str(vm, r.c_str());
 }
 
 var_t* JSPort::driverName(vm_t* vm, var_t *env, void *) {
@@ -58,7 +58,7 @@ var_t* JSPort::driverName(vm_t* vm, var_t *env, void *) {
 	string r = "";
 	if(port->connected())
 		r = port->driver_name();
-	return var_new_str(r.c_str());
+	return var_new_str(vm, r.c_str());
 }
 
 var_t* JSPort::status(vm_t* vm, var_t *env, void *) {
@@ -66,7 +66,7 @@ var_t* JSPort::status(vm_t* vm, var_t *env, void *) {
 	string r = "";
 	if(port->connected())
 		r = port->status();
-	return var_new_str(r.c_str());
+	return var_new_str(vm, r.c_str());
 }
 
 var_t* JSPort::setMode(vm_t* vm, var_t *env, void *) {
@@ -96,7 +96,7 @@ var_t* JSPort::modes(vm_t* vm, var_t *env, void *) {
 	var_t* v = var_new_array();
 	for(std::set<std::string>::iterator it=r.begin(); it!=r.end(); ++it) {
 		string i = *it;
-		var_add(v, "", var_new_str(i.c_str()));
+		var_add(v, "", var_new_str(vm, i.c_str()));
 	}
 	return v;
 }

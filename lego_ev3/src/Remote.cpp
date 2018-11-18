@@ -28,7 +28,7 @@ static void _destroyRemote(void* p) {
 static std::function<void(bool)> remoteEvent(vm_t* vm, var_t* thisV, const char* button) {
 	return [vm, thisV, button](bool state) {
 		var_t* args = var_new();
-		var_t* bt = var_new_str(button);
+		var_t* bt = var_new_str(vm, button);
 		var_t* st = var_new_int(state ? 1:0);
 
 		var_add(args, "", bt);

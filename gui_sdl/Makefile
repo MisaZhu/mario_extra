@@ -9,14 +9,13 @@ endif
 ifeq ($(MARIO_VM),)
 MARIO_VM = ../../mario_vm/vm
 endif
-MARIO_COMP = $(MARIO_VM)/../compilers/$(MARIO_LANG)
 
 CC := $(CROSS_COMPILE)gcc
 CXX := $(CROSS_COMPILE)g++
 AR := $(CROSS_COMPILE)ar
 LD := $(CROSS_COMPILE)g++
 
-mario_OBJS= $(MARIO_VM)/mario_utils.o $(MARIO_VM)/mario_bc.o $(MARIO_VM)/mario_vm.o $(MARIO_VM)/mario_lex.o $(MARIO_COMP)/compiler.o
+mario_OBJS= $(MARIO_VM)/mario_utils.o $(MARIO_VM)/mario_bc.o $(MARIO_VM)/mario_vm.o $(MARIO_VM)/mario_lex.o
 
 MARIO_GUI=yes
 
@@ -47,6 +46,7 @@ clean:
 	rm -fr $(GUI_TARGET) $(GUI_OBJS)
 
 install: 
-	mkdir -p $(INST_DST)/test.js/$(GUI)
-	cp test.js/* $(INST_DST)/test.js/$(GUI)
-	cp $(GUI_TARGET) $(INST_DST)/libs
+	mkdir -p $(INST_DST)/natives
+	cp $(GUI_TARGET) $(INST_DST)/natives
+	mkdir -p $(INST_DST)/test/$(MARIO_LANG)/$(GUI)
+	cp test/$(MARIO_LANG)/* $(INST_DST)/test/$(MARIO_LANG)/$(GUI)

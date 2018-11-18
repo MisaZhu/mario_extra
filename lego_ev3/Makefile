@@ -9,32 +9,30 @@ endif
 ifeq ($(MARIO_VM),)
 MARIO_VM = ../../mario_vm/vm
 endif
-MARIO_COMP = $(MARIO_VM)/../compilers/$(MARIO_LANG)
 
 CC := $(CROSS_COMPILE)g++
 CXX := $(CROSS_COMPILE)g++
 AR := $(CROSS_COMPILE)ar
 LD := $(CROSS_COMPILE)g++
 
-mario_OBJS= $(MARIO_VM)/mario_utils.o $(MARIO_VM)/mario_bc.o $(MARIO_VM)/mario_vm.o $(MARIO_VM)/mario_lex.o $(MARIO_COMP)/compiler.o
-
+mario_OBJS= $(MARIO_VM)/mario_utils.o $(MARIO_VM)/mario_bc.o $(MARIO_VM)/mario_vm.o $(MARIO_VM)/mario_lex.o
 
 OBJS= $(mario_OBJS) \
-	native_ev3.o \
-	Ports.o \
-	Port.o \
-	Sound.o \
-	Motor.o \
-	DCMotor.o \
-	ServoMotor.o \
-	Ultrasonic.o \
-	Infrared.o \
-	Button.o \
-	Remote.o \
-	Touch.o \
-	Gyro.o \
-	ColorSensor.o \
-	ev3dev.o
+	src/native_ev3.o \
+	src/Ports.o \
+	src/Port.o \
+	src/Sound.o \
+	src/Motor.o \
+	src/DCMotor.o \
+	src/ServoMotor.o \
+	src/Ultrasonic.o \
+	src/Infrared.o \
+	src/Button.o \
+	src/Remote.o \
+	src/Touch.o \
+	src/Gyro.o \
+	src/ColorSensor.o \
+	src/ev3dev.o
 
 
 CXXFLAGS =  -I$(MARIO_VM) -g -Wall -DMARIO_DEBUG -DMARIO_CACHE -fPIC -std=c++0x  -I. -DEV3DEV_PLATFORM=EV3
@@ -56,7 +54,7 @@ clean:
 	rm -fr $(TARGET) $(OBJS) *.dSYM
 
 install:
-	mkdir -p $(INST_DST)/libs
-	cp $(TARGET) $(INST_DST)/libs
-	mkdir -p $(INST_DST)/test.js/$(NAME)
-	cp test.js/* $(INST_DST)/test.js/$(NAME)
+	mkdir -p $(INST_DST)/natives
+	cp $(TARGET) $(INST_DST)/natives
+	mkdir -p $(INST_DST)/test/$(MARIO_LANG)/$(NAME)
+	cp test/$(MARIO_LANG)/* $(INST_DST)/test/$(MARIO_LANG)/$(NAME)

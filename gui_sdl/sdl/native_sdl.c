@@ -30,7 +30,8 @@ var_t* native_sdl_quit(vm_t* vm, var_t* env, void* data) {
 static SDL_Event event;
 var_t* native_sdl_pollEvent(vm_t* vm, var_t* env, void *data) {
 	(void)vm; (void)env; (void)data;
-	
+	event.type = 0;
+
 	SDL_PollEvent(&event);
 	var_t* v = var_new_obj(NULL, NULL);
 	var_add(v, "type", var_new_int(event.type));
@@ -40,7 +41,48 @@ var_t* native_sdl_pollEvent(vm_t* vm, var_t* env, void *data) {
 		var_add(ke, "code", var_new_int(event.key.keysym.sym));
 		var_add(v, "keyboard", ke);
 	}
+	else if(event.type == SDL_TEXTINPUT) { //
+		var_t* txt = var_new_obj(NULL, NULL);
+		var_add(txt, "text", var_new_str(vm, event.text.text));
+		var_add(v, "text", txt);
+	}
+	else if(event.type == SDL_TEXTEDITING) { //
+		var_t* edit = var_new_obj(NULL, NULL);
+		var_add(edit, "text", var_new_str(vm, event.edit.text));
+		var_add(edit, "start", var_new_int(event.edit.start));
+		var_add(edit, "length", var_new_int(event.edit.length));
+		var_add(v, "edit", edit);
+	}
+
 	return v;
+}
+
+var_t* native_sdl_startTextInput(vm_t* vm, var_t* env, void *data) {
+	(void)vm; (void)env; (void)data;
+	
+	SDL_StartTextInput();
+	return NULL;
+}
+
+var_t* native_sdl_stopTextInput(vm_t* vm, var_t* env, void *data) {
+	(void)vm; (void)env; (void)data;
+	
+	SDL_StopTextInput();
+	return NULL;
+}
+
+var_t* native_sdl_setTextInputRect(vm_t* vm, var_t* env, void *data) {
+	(void)vm; (void)data;
+	
+	SDL_Rect r;
+	var_t* var = get_obj(env, "r");
+	r.x = get_int(var, "x");
+	r.y = get_int(var, "y");
+	r.w = get_int(var, "w");
+	r.h = get_int(var, "h");
+
+	SDL_SetTextInputRect(&r);
+	return NULL;
 }
 
 var_t* native_sdl_getDisplayMode(vm_t* vm, var_t* env, void *data) {
@@ -76,7 +118,7 @@ var_t* native_sdl_createWindow(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_WINDOW, 0);
 	v->value = win;
 	v->free_func = _free_none;//don't destroy win automaticly.
-	var_add(v, "title", var_new_str(title));
+	var_add(v, "title", var_new_str(vm, title));
 	var_add(v, "x", var_new_int(x));
 	var_add(v, "y", var_new_int(y));
 	var_add(v, "w", var_new_int(w));
@@ -751,10 +793,16 @@ void reg_native_sdl(vm_t* vm) {
 	vm_reg_native(vm, CLS_SIZE, "constructor(w, h)", native_size_constructor, NULL);
 
 	//Event
+	vm_reg_var(vm, CLS_EVENT, "NONE", var_new_int(0), true);
 	vm_reg_var(vm, CLS_EVENT, "QUIT", var_new_int(SDL_QUIT), true);
 	vm_reg_var(vm, CLS_EVENT, "KEY_UP", var_new_int(SDL_KEYUP), true);
 	vm_reg_var(vm, CLS_EVENT, "KEY_DOWN", var_new_int(SDL_KEYDOWN), true);
+	vm_reg_var(vm, CLS_EVENT, "TEXT_INPUT", var_new_int(SDL_TEXTINPUT), true);
+	vm_reg_var(vm, CLS_EVENT, "TEXT_EDITING", var_new_int(SDL_TEXTEDITING), true);
 	vm_reg_native(vm, CLS_EVENT, "pollEvent()", native_sdl_pollEvent, NULL);
+	vm_reg_native(vm, CLS_EVENT, "startTextInput()", native_sdl_startTextInput, NULL);
+	vm_reg_native(vm, CLS_EVENT, "stopTextInput()", native_sdl_stopTextInput, NULL);
+	vm_reg_native(vm, CLS_EVENT, "setTextInputRect(r)", native_sdl_setTextInputRect, NULL);
 
 	//Window
 	vm_reg_native(vm, CLS_WINDOW, "destroy()", native_window_destroy, NULL);

@@ -3,10 +3,8 @@ if(_args.length < 3) {
 	return;
 }
 
-let dir = new Dir();
-dir.open(_args[2]);
+let dir = new Dir(_args[2]);
 let count = 0;
-
 let s = "";
 while(true) {
 	s = dir.read();
@@ -17,6 +15,6 @@ while(true) {
 	console.log("[" + s + "]\n");
 	count++;
 }
-
 dir.close();
+
 console.log("--------\nTotal: " + count + "\n");

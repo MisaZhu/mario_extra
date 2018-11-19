@@ -1,17 +1,6 @@
 #include "mario_vm.h"
 #include "verbalexpressions.h"
 
-
-static verex::verex* getRegex(var_t* c) {
-	var_t* thisV = get_obj(c, THIS);
-	var_t* n = get_obj(thisV, "verex");
-	if(n == NULL)
-		return NULL;
-
-	verex::verex* m = (verex::verex*)n->value;
-	return m;
-}
-
 static void _destroyRegex(void* p) {
 	verex::verex* m = (verex::verex*)p;
 	if(m == NULL)
@@ -19,15 +8,15 @@ static void _destroyRegex(void* p) {
 	delete m;
 }
 
-#define GET_REGEX verex::verex* regex = getRegex(env); \
+#define GET_REGEX verex::verex* regex = (verex::verex*)get_raw(env, THIS); \
 	if(regex == NULL)\
 		return NULL;
 
 var_t* native_regex_constructor(vm_t* vm, var_t* env, void* data) {
-	var_t* thisV = get_obj(env, THIS);
 	verex::verex *m = new verex::verex();
-	var_t* v = var_new_obj(m, _destroyRegex);
-	var_add(thisV, "verex", v);
+	var_t* thisV = var_new_obj(m, _destroyRegex);
+	var_t* protoV = get_obj(env, PROTOTYPE);
+  var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
 

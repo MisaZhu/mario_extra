@@ -11,35 +11,14 @@ static void destroyDir(void* data) {
 		closedir(dir);
 }
 
-static DIR* getDir(var_t* env) {
-	var_t* thisV = get_obj(env, THIS);
-	if(thisV == NULL)
-		return NULL;
-	
-	var_t* n = get_obj(thisV, "dir");
-	if(n == NULL)
-		return NULL;
-	return (DIR*)(n->value);
-}
-
-static var_t* setDir(vm_t* vm, var_t* env, DIR* dir) {
-	var_t* thisV = get_obj(env, THIS);
-	if(thisV == NULL)
-		return NULL;
-	
-	node_t* n = var_find_create(thisV, "dir");
-	var_t* v = var_new_obj(dir, destroyDir);
-	node_replace(n, v);
-	return thisV;
-}
-
 var_t* native_dir_close(vm_t* vm, var_t* env, void* data) {
-	setDir(vm, env, NULL);
+	var_t* thisV = get_obj(env, THIS);
+	var_clean(thisV);
 	return NULL;
 }
 
 var_t* native_dir_read(vm_t* vm, var_t* env, void* data) {
-	DIR* dir = getDir(env);
+	DIR* dir = (DIR*)get_raw(env, THIS);
 	if(dir == NULL)
 		return var_new_str(vm, "");
 
@@ -59,16 +38,19 @@ var_t* native_dir_open(vm_t* vm, var_t* env, void* data) {
 
 	DIR* d = opendir(name);
 	if(d == NULL)
-		return var_new_int(0);
-
-	setDir(vm, env, d);
-	return var_new_int(1);
+		return NULL;
+	
+	var_t* thisV = var_new_obj(d, destroyDir);
+	var_t* protoV = get_obj(env, PROTOTYPE);
+  var_add(thisV, PROTOTYPE, protoV);
+	return thisV;
 }
 
 #define CLS_DIR "Dir"
 
 void reg_native_dir(vm_t* vm) {
 	vm_reg_native(vm, CLS_DIR, "close()", native_dir_close, NULL);
-	vm_reg_native(vm, CLS_DIR, "open(name)", native_dir_open, NULL);
+	vm_reg_static(vm, CLS_DIR, "open(name)", native_dir_open, NULL);
+	vm_reg_native(vm, CLS_DIR, "constructor(name)", native_dir_open, NULL);
 	vm_reg_native(vm, CLS_DIR, "read()", native_dir_read, NULL);
 }	

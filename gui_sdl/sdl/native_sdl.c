@@ -725,9 +725,7 @@ var_t* native_image_loadTexture(vm_t* vm, var_t* env, void *data) {
 //Rect
 var_t* native_rect_constructor(vm_t* vm, var_t* env, void* data) {
 	(void)vm; (void)data;
-	var_t* thisV = get_obj(env, THIS);
-	if(thisV == NULL)
-		return NULL;
+	var_t* thisV = var_new_obj(NULL, NULL);
 
 	int x = get_int(env, "x");
 	int y = get_int(env, "y");
@@ -738,36 +736,41 @@ var_t* native_rect_constructor(vm_t* vm, var_t* env, void* data) {
 	var_add(thisV, "y", var_new_int(y));
 	var_add(thisV, "w", var_new_int(w));
 	var_add(thisV, "h", var_new_int(h));
+
+	var_t* protoV = get_obj(env, PROTOTYPE);
+  var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
 
 //Size
 var_t* native_size_constructor(vm_t* vm, var_t* env, void* data) {
 	(void)vm; (void)data;
-	var_t* thisV = get_obj(env, THIS);
-	if(thisV == NULL)
-		return NULL;
+	var_t* thisV = var_new_obj(NULL, NULL);
 
 	int w = get_int(env, "w");
 	int h = get_int(env, "h");
 	
 	var_add(thisV, "w", var_new_int(w));
 	var_add(thisV, "h", var_new_int(h));
+
+	var_t* protoV = get_obj(env, PROTOTYPE);
+  var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
 
 //Pos
 var_t* native_pos_constructor(vm_t* vm, var_t* env, void* data) {
 	(void)vm; (void)data;
-	var_t* thisV = get_obj(env, THIS);
-	if(thisV == NULL)
-		return NULL;
+	var_t* thisV = var_new_obj(NULL, NULL);
 
 	int x = get_int(env, "x");
 	int y = get_int(env, "y");
 	
 	var_add(thisV, "x", var_new_int(x));
 	var_add(thisV, "y", var_new_int(y));
+	
+	var_t* protoV = get_obj(env, PROTOTYPE);
+  var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
 
@@ -778,10 +781,10 @@ var_t* native_pos_constructor(vm_t* vm, var_t* env, void* data) {
 
 void reg_native_sdl(vm_t* vm) {
 	//SDL
-	vm_reg_native(vm, CLS_SDL, "init()", native_sdl_init, NULL);
-	vm_reg_native(vm, CLS_SDL, "quit()", native_sdl_quit, NULL);
-	vm_reg_native(vm, CLS_SDL, "getDisplayMode()", native_sdl_getDisplayMode, NULL);
-	vm_reg_native(vm, CLS_SDL, "createWindow(title, x, y, w, h, fullscreen)", native_sdl_createWindow, NULL);
+	vm_reg_static(vm, CLS_SDL, "init()", native_sdl_init, NULL);
+	vm_reg_static(vm, CLS_SDL, "quit()", native_sdl_quit, NULL);
+	vm_reg_static(vm, CLS_SDL, "getDisplayMode()", native_sdl_getDisplayMode, NULL);
+	vm_reg_static(vm, CLS_SDL, "createWindow(title, x, y, w, h, fullscreen)", native_sdl_createWindow, NULL);
 
 	//Rect
 	vm_reg_native(vm, CLS_RECT, "constructor(x, y, w, h)", native_rect_constructor, NULL);
@@ -799,10 +802,10 @@ void reg_native_sdl(vm_t* vm) {
 	vm_reg_var(vm, CLS_EVENT, "KEY_DOWN", var_new_int(SDL_KEYDOWN), true);
 	vm_reg_var(vm, CLS_EVENT, "TEXT_INPUT", var_new_int(SDL_TEXTINPUT), true);
 	vm_reg_var(vm, CLS_EVENT, "TEXT_EDITING", var_new_int(SDL_TEXTEDITING), true);
-	vm_reg_native(vm, CLS_EVENT, "pollEvent()", native_sdl_pollEvent, NULL);
-	vm_reg_native(vm, CLS_EVENT, "startTextInput()", native_sdl_startTextInput, NULL);
-	vm_reg_native(vm, CLS_EVENT, "stopTextInput()", native_sdl_stopTextInput, NULL);
-	vm_reg_native(vm, CLS_EVENT, "setTextInputRect(r)", native_sdl_setTextInputRect, NULL);
+	vm_reg_static(vm, CLS_EVENT, "pollEvent()", native_sdl_pollEvent, NULL);
+	vm_reg_static(vm, CLS_EVENT, "startTextInput()", native_sdl_startTextInput, NULL);
+	vm_reg_static(vm, CLS_EVENT, "stopTextInput()", native_sdl_stopTextInput, NULL);
+	vm_reg_static(vm, CLS_EVENT, "setTextInputRect(r)", native_sdl_setTextInputRect, NULL);
 
 	//Window
 	vm_reg_native(vm, CLS_WINDOW, "destroy()", native_window_destroy, NULL);
@@ -820,9 +823,9 @@ void reg_native_sdl(vm_t* vm) {
 	vm_reg_native(vm, CLS_IMAGE, "loadTexture(canvas, fname)", native_image_loadTexture, NULL);
 
 	//Font
-	vm_reg_native(vm, CLS_FONT, "init()", native_font_init, NULL);
-	vm_reg_native(vm, CLS_FONT, "quit()", native_font_quit, NULL);
-	vm_reg_native(vm, CLS_FONT, "open(fname, size)", native_font_open, NULL);
+	vm_reg_static(vm, CLS_FONT, "init()", native_font_init, NULL);
+	vm_reg_static(vm, CLS_FONT, "quit()", native_font_quit, NULL);
+	vm_reg_static(vm, CLS_FONT, "open(fname, size)", native_font_open, NULL);
 	vm_reg_native(vm, CLS_FONT, "close()", native_font_close, NULL);
 	vm_reg_native(vm, CLS_FONT, "sizeOf(text)", native_font_sizeOf, NULL);
 	vm_reg_native(vm, CLS_FONT, "genSurface(text, color)", native_font_genSurface, NULL);

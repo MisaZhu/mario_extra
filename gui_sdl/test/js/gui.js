@@ -48,9 +48,12 @@ while(true) {
 	}
 	else if(ev.type == Event.KEY_DOWN) {
 		if(ev.keyboard.code == 8) {
-			let len = text.length();
-			if(len > 0) 
-				text = text.substr(0, len-1);
+			let utf8 = new UTF8(text);
+			let len = utf8.length();
+			if(len > 0) {
+				utf8 = utf8.substr(0, len-1);
+				text = utf8.toString();
+			}
 		}
 	}
 	else if(ev.type == Event.TEXT_INPUT) {

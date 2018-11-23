@@ -15,8 +15,8 @@ CXX := $(CROSS_COMPILE)g++
 AR := $(CROSS_COMPILE)ar
 LD := $(CROSS_COMPILE)g++
 
-mario_OBJS= $(MARIO_VM)/mario_utils.o $(MARIO_VM)/mario_bc.o $(MARIO_VM)/mario_vm.o $(MARIO_VM)/mario_lex.o 
-basic_OBJS= native_basic.o \
+mario_OBJS= $(MARIO_VM)/mario_utils.o $(MARIO_VM)/mario_bc.o $(MARIO_VM)/mario_vm.o
+native_OBJS= native_basic.o \
 	system/native_system.o \
 	socket/native_socket.o  \
 	fs/native_fs.o \
@@ -33,11 +33,11 @@ LDFLAGS =  -lm -lpthread
 INST_DST=/usr/local/mario
 TARGET=native_basic.so
 
-all: $(mario_OBJS) $(basic_OBJS)
-	$(LD) -shared -o $(TARGET) $(mario_OBJS) $(basid_OBJS) $(LDFLAGS)
+all: $(mario_OBJS) $(native_OBJS)
+	$(LD) -shared -o $(TARGET) $(mario_OBJS) $(native_OBJS) $(LDFLAGS)
 
 clean:
-	rm -fr $(TARGET) $(mario_OBJS) $(basic_OBJS)
+	rm -fr $(TARGET) $(mario_OBJS) $(native_OBJS)
 
 install: 
 	mkdir -p $(INST_DST)/natives

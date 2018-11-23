@@ -40,8 +40,8 @@ clean:
 install: 
 	mkdir -p $(INST_DST)/natives
 	cp $(SYS_TARGET) $(INST_DST)/natives
-	mkdir -p $(INST_DST)/test/$(MARIO_LANG)/$(SYS)
-	cp $(SYS)/test/$(MARIO_LANG)/* $(INST_DST)/test/$(MARIO_LANG)/$(SYS)
 	cp $(REGEX_TARGET) $(INST_DST)/natives
-	mkdir -p $(INST_DST)/test/$(MARIO_LANG)/$(REGEX)
-	cp $(REGEX)/test/$(MARIO_LANG)/* $(INST_DST)/test/$(MARIO_LANG)/$(REGEX)
+	mkdir -p $(INST_DST)/libs/$(MARIO_LANG)
+	cp lang/$(MARIO_LANG)/libs/* $(INST_DST)/libs/$(MARIO_LANG)
+	mkdir -p $(INST_DST)/test/$(MARIO_LANG)
+	cp lang/$(MARIO_LANG)/test/* $(INST_DST)/test/$(MARIO_LANG)

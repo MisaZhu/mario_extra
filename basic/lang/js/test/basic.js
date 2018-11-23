@@ -1,5 +1,5 @@
 setTimeout(function() {
-	console.log("timeout\n");
+	console.log("timeout.");
 	marioQuit();
 }, 1000);
 

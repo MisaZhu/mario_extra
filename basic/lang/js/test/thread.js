@@ -1,6 +1,6 @@
 let js = "
 	MarioThread.current().onMessage = function(s) {
-		console.ln('from main msg: '+ s); 
+		console.log('from main msg: '+ s); 
 		MarioThread.father().sendMessage('reply ' + s);
 	};
 	while(true) { 
@@ -12,7 +12,7 @@ let th = MarioThread.run(js);
 let x = 1000;
 
 MarioThread.current().onMessage = function(s) {
-	console.ln('from sub msg: '+ s);
+	console.log('from sub msg: '+ s);
 };
 
 

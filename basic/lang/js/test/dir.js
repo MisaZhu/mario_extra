@@ -1,5 +1,5 @@
 if(_args.length < 3) {
-	console.log("Error: dirname missed.\n");
+	console.log("Error: dirname missed.");
 	return;
 }
 
@@ -12,9 +12,9 @@ while(true) {
 	if(s.length == 0)
 		break;
 
-	console.log("[" + s + "]\n");
+	console.log("[" + s + "]");
 	count++;
 }
 dir.close();
 
-console.log("--------\nTotal: " + count + "\n");
+console.log("--------\nTotal: " + count);

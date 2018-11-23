@@ -1,7 +1,7 @@
 let promise = new Promise(function(resolve, reject) {
 	setTimeout(function() { 
-		resolve("ok.\n"); 
-		//reject("error!\n"); 
+		resolve("ok."); 
+		//reject("error!"); 
 	}, 1000);
 });
 
@@ -15,6 +15,6 @@ promise.then(function(value) {
 		marioQuit();
 	});
 
-console.log("main task going.\n");
+console.log("main task going.");
 
 marioLoop();

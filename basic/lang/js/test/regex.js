@@ -9,9 +9,9 @@ let expr = regex
 				.anythingBut(" ")
 				.endOfLine(true);
 
-console.ln(expr.toString());
-console.ln(expr.test("https://www.rokid.com"));
+console.log(expr.toString());
+console.log(expr.test("https://www.rokid.com"));
 
 expr = regex.reset().find("name");
-console.ln(expr.toString());
-console.ln(expr.replace("Hello, name.", "master Yoda"));
+console.log(expr.toString());
+console.log(expr.replace("Hello, name.", "master Yoda"));

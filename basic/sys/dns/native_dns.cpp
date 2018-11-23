@@ -26,7 +26,7 @@ var_t* native_dns_resolv(vm_t* vm, var_t* env, void *data) {
 	var_t *ret = var_new_array();
 	size_t sz = res.size();
 	for(size_t i=0; i<sz; ++i) {
-		var_add(ret, "", var_new_str(res[i].res.c_str()));
+		var_array_add(ret, var_new_str(res[i].res.c_str()));
 	}
 
 	return ret;

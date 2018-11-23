@@ -5,6 +5,8 @@ SYS_OBJS= $(mario_OBJS) $(mario_js_OBJS) \
 	$(SYS)/socket/native_socket.o  \
 	$(SYS)/fs/native_fs.o \
 	$(SYS)/dir/native_dir.o \
+	$(SYS)/thread/native_thread.o \
+	$(SYS)/timer/native_timer.o \
 	$(SYS)/dns/dnsc.o $(SYS)/dns/query.o $(SYS)/dns/request.o $(SYS)/dns/response.o $(SYS)/dns/native_dns.o
 
 SYS_TARGET=$(SYS)/native_$(SYS).so

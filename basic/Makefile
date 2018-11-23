@@ -43,5 +43,5 @@ install:
 	cp $(REGEX_TARGET) $(INST_DST)/natives
 	mkdir -p $(INST_DST)/libs/$(MARIO_LANG)
 	cp lang/$(MARIO_LANG)/libs/* $(INST_DST)/libs/$(MARIO_LANG)
-	mkdir -p $(INST_DST)/test/$(MARIO_LANG)
-	cp lang/$(MARIO_LANG)/test/* $(INST_DST)/test/$(MARIO_LANG)
+	mkdir -p $(INST_DST)/test/$(MARIO_LANG)/basic
+	cp lang/$(MARIO_LANG)/test/* $(INST_DST)/test/$(MARIO_LANG)/basic

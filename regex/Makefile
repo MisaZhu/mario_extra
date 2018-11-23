@@ -16,22 +16,15 @@ AR := $(CROSS_COMPILE)ar
 LD := $(CROSS_COMPILE)g++
 
 mario_OBJS= $(MARIO_VM)/mario_utils.o $(MARIO_VM)/mario_bc.o $(MARIO_VM)/mario_vm.o $(MARIO_VM)/mario_lex.o 
-basic_OBJS= native_basic.o \
-	system/native_system.o \
-	socket/native_socket.o  \
-	fs/native_fs.o \
-	dir/native_dir.o \
-	thread/native_thread.o \
-	timer/native_timer.o \
-	dns/dnsc.o dns/query.o dns/request.o dns/response.o dns/native_dns.o
+basic_OBJS= native_regex.o
 
 
 CFLAGS =  -g -I$(MARIO_VM) -Wall -fPIC -DMARIO_DEBUG -DMARIO_CACHE -DMARIO_THREAD
-CXXFLAGS =  $(CFLAGS)
+CXXFLAGS =  $(CFLAGS) -std=c++11
 LDFLAGS =  -lm -lpthread
 
 INST_DST=/usr/local/mario
-TARGET=native_basic.so
+TARGET=native_regex.so
 
 all: $(mario_OBJS) $(basic_OBJS)
 	$(LD) -shared -o $(TARGET) $(mario_OBJS) $(basid_OBJS) $(LDFLAGS)
@@ -42,7 +35,5 @@ clean:
 install: 
 	mkdir -p $(INST_DST)/natives
 	cp $(TARGET) $(INST_DST)/natives
-	mkdir -p $(INST_DST)/libs/$(MARIO_LANG)
-	cp lang/$(MARIO_LANG)/libs/* $(INST_DST)/libs/$(MARIO_LANG)
-	mkdir -p $(INST_DST)/test/$(MARIO_LANG)/basic
-	cp lang/$(MARIO_LANG)/test/* $(INST_DST)/test/$(MARIO_LANG)/basic
+	mkdir -p $(INST_DST)/test/$(MARIO_LANG)/regex
+	cp lang/$(MARIO_LANG)/test/* $(INST_DST)/test/$(MARIO_LANG)/regex

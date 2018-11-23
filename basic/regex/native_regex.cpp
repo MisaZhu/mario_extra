@@ -15,7 +15,7 @@ static void _destroyRegex(void* p) {
 var_t* native_regex_constructor(vm_t* vm, var_t* env, void* data) {
 	verex::verex *m = new verex::verex();
 	var_t* thisV = var_new_obj(m, _destroyRegex);
-	var_t* protoV = get_obj(env, PROTOTYPE);
+	var_t* protoV = get_obj_member(env, PROTOTYPE);
   var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
@@ -25,7 +25,7 @@ var_t* native_regex_toString(vm_t* vm, var_t* env, void* data) {
 	GET_REGEX
 
 	const std::string& pattern = regex->get_pattern();
-	return var_new_str(vm, pattern.c_str());
+	return var_new_str(pattern.c_str());
 }
 
 var_t* native_regex_replace(vm_t* vm, var_t* env, void* data) {
@@ -35,7 +35,7 @@ var_t* native_regex_replace(vm_t* vm, var_t* env, void* data) {
 	GET_REGEX
 
 	std::string res = regex->replace(src, value);
-	return var_new_str(vm, res.c_str());
+	return var_new_str(res.c_str());
 }
 
 var_t* native_regex_find(vm_t* vm, var_t* env, void* data) {

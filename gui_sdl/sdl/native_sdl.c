@@ -43,12 +43,12 @@ var_t* native_sdl_pollEvent(vm_t* vm, var_t* env, void *data) {
 	}
 	else if(event.type == SDL_TEXTINPUT) { //
 		var_t* txt = var_new_obj(NULL, NULL);
-		var_add(txt, "text", var_new_str(vm, event.text.text));
+		var_add(txt, "text", var_new_str(event.text.text));
 		var_add(v, "text", txt);
 	}
 	else if(event.type == SDL_TEXTEDITING) { //
 		var_t* edit = var_new_obj(NULL, NULL);
-		var_add(edit, "text", var_new_str(vm, event.edit.text));
+		var_add(edit, "text", var_new_str(event.edit.text));
 		var_add(edit, "start", var_new_int(event.edit.start));
 		var_add(edit, "length", var_new_int(event.edit.length));
 		var_add(v, "edit", edit);
@@ -118,7 +118,7 @@ var_t* native_sdl_createWindow(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_WINDOW, 0);
 	v->value = win;
 	v->free_func = _free_none;//don't destroy win automaticly.
-	var_add(v, "title", var_new_str(vm, title));
+	var_add(v, "title", var_new_str(title));
 	var_add(v, "x", var_new_int(x));
 	var_add(v, "y", var_new_int(y));
 	var_add(v, "w", var_new_int(w));
@@ -737,7 +737,7 @@ var_t* native_rect_constructor(vm_t* vm, var_t* env, void* data) {
 	var_add(thisV, "w", var_new_int(w));
 	var_add(thisV, "h", var_new_int(h));
 
-	var_t* protoV = get_obj(env, PROTOTYPE);
+	var_t* protoV = get_obj_member(env, PROTOTYPE);
   var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
@@ -753,7 +753,7 @@ var_t* native_size_constructor(vm_t* vm, var_t* env, void* data) {
 	var_add(thisV, "w", var_new_int(w));
 	var_add(thisV, "h", var_new_int(h));
 
-	var_t* protoV = get_obj(env, PROTOTYPE);
+	var_t* protoV = get_obj_member(env, PROTOTYPE);
   var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }
@@ -769,7 +769,7 @@ var_t* native_pos_constructor(vm_t* vm, var_t* env, void* data) {
 	var_add(thisV, "x", var_new_int(x));
 	var_add(thisV, "y", var_new_int(y));
 	
-	var_t* protoV = get_obj(env, PROTOTYPE);
+	var_t* protoV = get_obj_member(env, PROTOTYPE);
   var_add(thisV, PROTOTYPE, protoV);
 	return thisV;
 }

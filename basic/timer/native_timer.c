@@ -107,8 +107,6 @@ void* timerThread(void* p) {
 		tryTimers(vm);
 		pthread_mutex_unlock(&js_timer->timerLocker);
 	}
-
-	pthread_mutex_destroy(&js_timer->timerLocker);
 	return NULL;
 }
 

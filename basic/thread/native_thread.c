@@ -34,16 +34,14 @@ var_t* native_thread_run(vm_t* vm, var_t* env, void* data) {
 	}
 
 	var_t* vmain = var_new_obj(vm, _free_none);
-	var_t* protoV = get_obj_member(env, PROTOTYPE);
-  var_add(vmain, PROTOTYPE, protoV);
+  var_instance_from(vmain, get_obj(env, THIS));
 	var_add(vm_thread->root, "_fatherThread", vmain);
 
 	pthread_t pid;
 	pthread_create(&pid, NULL, threadThread, vm_thread);
 
 	var_t* vthread = var_new_obj(vm_thread, _free_none);
-	protoV = get_obj_member(env, PROTOTYPE);
-  var_add(vthread, PROTOTYPE, protoV);
+  var_instance_from(vthread, get_obj(env, THIS));
 	return vthread;
 }
 

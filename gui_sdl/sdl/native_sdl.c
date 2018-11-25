@@ -737,8 +737,7 @@ var_t* native_rect_constructor(vm_t* vm, var_t* env, void* data) {
 	var_add(thisV, "w", var_new_int(w));
 	var_add(thisV, "h", var_new_int(h));
 
-	var_t* protoV = get_obj_member(env, PROTOTYPE);
-  var_add(thisV, PROTOTYPE, protoV);
+  var_instance_from(thisV, get_obj(env, THIS));
 	return thisV;
 }
 
@@ -753,8 +752,7 @@ var_t* native_size_constructor(vm_t* vm, var_t* env, void* data) {
 	var_add(thisV, "w", var_new_int(w));
 	var_add(thisV, "h", var_new_int(h));
 
-	var_t* protoV = get_obj_member(env, PROTOTYPE);
-  var_add(thisV, PROTOTYPE, protoV);
+  var_instance_from(thisV, get_obj(env, THIS));
 	return thisV;
 }
 
@@ -769,8 +767,7 @@ var_t* native_pos_constructor(vm_t* vm, var_t* env, void* data) {
 	var_add(thisV, "x", var_new_int(x));
 	var_add(thisV, "y", var_new_int(y));
 	
-	var_t* protoV = get_obj_member(env, PROTOTYPE);
-  var_add(thisV, PROTOTYPE, protoV);
+  var_instance_from(thisV, get_obj(env, THIS));
 	return thisV;
 }
 

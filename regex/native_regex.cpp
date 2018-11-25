@@ -15,8 +15,7 @@ static void _destroyRegex(void* p) {
 var_t* native_regex_constructor(vm_t* vm, var_t* env, void* data) {
 	verex::verex *m = new verex::verex();
 	var_t* thisV = var_new_obj(m, _destroyRegex);
-	var_t* protoV = get_obj_member(env, PROTOTYPE);
-  var_add(thisV, PROTOTYPE, protoV);
+  var_instance_from(thisV, get_obj(env, THIS));
 	return thisV;
 }
 

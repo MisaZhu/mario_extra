@@ -26,7 +26,14 @@ native_OBJS= native_basic.o \
 	dns/dnsc.o dns/query.o dns/request.o dns/response.o dns/native_dns.o
 
 
-CFLAGS =  -g -I$(MARIO_VM) -Wall -fPIC -DMARIO_DEBUG -DMARIO_CACHE -DMARIO_THREAD
+CFLAGS =  -I$(MARIO_VM) -Wall -fPIC -DMARIO_DEBUG -DMARIO_CACHE -DMARIO_THREAD
+
+ifneq ($(MARIO_DEBUG), no)
+CFLAGS += -g -DMARIO_DEBUG
+else
+CFLAGS += -O2
+endif
+
 CXXFLAGS =  $(CFLAGS)
 LDFLAGS =  -lm -lpthread
 

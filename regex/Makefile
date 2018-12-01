@@ -19,7 +19,14 @@ mario_OBJS= $(MARIO_VM)/mario_utils.o $(MARIO_VM)/mario_bc.o $(MARIO_VM)/mario_v
 native_OBJS= native_regex.o
 
 
-CFLAGS =  -g -I$(MARIO_VM) -Wall -fPIC -DMARIO_DEBUG -DMARIO_CACHE -DMARIO_THREAD
+CFLAGS =  -I$(MARIO_VM) -Wall -fPIC -DMARIO_DEBUG -DMARIO_CACHE -DMARIO_THREAD
+
+ifneq ($(MARIO_DEBUG), no)
+CFLAGS += -g -DMARIO_DEBUG
+else
+CFLAGS += -O2
+endif
+
 CXXFLAGS =  $(CFLAGS) -std=c++11
 LDFLAGS =  -lm -lpthread -lstdc++
 

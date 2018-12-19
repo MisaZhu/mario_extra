@@ -15,8 +15,8 @@ var_t* native_sdl_init(vm_t* vm, var_t* env, void* data) {
 	(void)vm; (void)env; (void)data;
 	int res = SDL_Init(SDL_INIT_VIDEO);
 	if(res == 0)
-		return var_new_int(true);
-	return var_new_int(false);
+		return var_new_int(vm, true);
+	return var_new_int(vm, false);
 }
 
 var_t* native_sdl_quit(vm_t* vm, var_t* env, void* data) {
@@ -33,24 +33,24 @@ var_t* native_sdl_pollEvent(vm_t* vm, var_t* env, void *data) {
 	event.type = 0;
 
 	SDL_PollEvent(&event);
-	var_t* v = var_new_obj(NULL, NULL);
-	var_add(v, "type", var_new_int(event.type));
+	var_t* v = var_new_obj(vm, NULL, NULL);
+	var_add(v, "type", var_new_int(vm, event.type));
 
 	if(event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) { //keyboard event
-		var_t* ke = var_new_obj(NULL, NULL);
-		var_add(ke, "code", var_new_int(event.key.keysym.sym));
+		var_t* ke = var_new_obj(vm, NULL, NULL);
+		var_add(ke, "code", var_new_int(vm, event.key.keysym.sym));
 		var_add(v, "keyboard", ke);
 	}
 	else if(event.type == SDL_TEXTINPUT) { //
-		var_t* txt = var_new_obj(NULL, NULL);
-		var_add(txt, "text", var_new_str(event.text.text));
+		var_t* txt = var_new_obj(vm, NULL, NULL);
+		var_add(txt, "text", var_new_str(vm, event.text.text));
 		var_add(v, "text", txt);
 	}
 	else if(event.type == SDL_TEXTEDITING) { //
-		var_t* edit = var_new_obj(NULL, NULL);
-		var_add(edit, "text", var_new_str(event.edit.text));
-		var_add(edit, "start", var_new_int(event.edit.start));
-		var_add(edit, "length", var_new_int(event.edit.length));
+		var_t* edit = var_new_obj(vm, NULL, NULL);
+		var_add(edit, "text", var_new_str(vm, event.edit.text));
+		var_add(edit, "start", var_new_int(vm, event.edit.start));
+		var_add(edit, "length", var_new_int(vm, event.edit.length));
 		var_add(v, "edit", edit);
 	}
 
@@ -91,9 +91,9 @@ var_t* native_sdl_getDisplayMode(vm_t* vm, var_t* env, void *data) {
 	if(SDL_GetCurrentDisplayMode(0, &current) != 0) {
 		return NULL;
 	}
-	var_t* v = var_new_obj(NULL, NULL);
-	var_add(v, "w", var_new_int(current.w));
-	var_add(v, "h", var_new_int(current.h));
+	var_t* v = var_new_obj(vm, NULL, NULL);
+	var_add(v, "w", var_new_int(vm, current.w));
+	var_add(v, "h", var_new_int(vm, current.h));
 	return v;
 }
 
@@ -118,11 +118,11 @@ var_t* native_sdl_createWindow(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_WINDOW, 0);
 	v->value = win;
 	v->free_func = _free_none;//don't destroy win automaticly.
-	var_add(v, "title", var_new_str(title));
-	var_add(v, "x", var_new_int(x));
-	var_add(v, "y", var_new_int(y));
-	var_add(v, "w", var_new_int(w));
-	var_add(v, "h", var_new_int(h));
+	var_add(v, "title", var_new_str(vm, title));
+	var_add(v, "x", var_new_int(vm, x));
+	var_add(v, "y", var_new_int(vm, y));
+	var_add(v, "w", var_new_int(vm, w));
+	var_add(v, "h", var_new_int(vm, h));
 	return v;
 }
 
@@ -163,8 +163,8 @@ var_t* native_font_init(vm_t* vm, var_t* env, void* data) {
 	(void)vm; (void)env; (void)data;
 	int res = TTF_Init();
 	if(res == 0)
-		return var_new_int(true);
-	return var_new_int(false);
+		return var_new_int(vm, true);
+	return var_new_int(vm, false);
 }
 
 var_t* native_font_quit(vm_t* vm, var_t* env, void* data) {
@@ -185,7 +185,7 @@ var_t* native_font_open(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_FONT, 0);
 	v->value = font;
 	v->free_func = _free_none;
-	var_add(v, "size", var_new_int(size));
+	var_add(v, "size", var_new_int(vm, size));
 	return v;
 }
 
@@ -211,9 +211,9 @@ var_t* native_font_sizeOf(vm_t* vm, var_t* env, void *data) {
 	int w, h;
 	TTF_SizeUTF8(font, s, &w, &h);
 
-	var_t* v = var_new_obj(NULL, NULL);
-	var_add(v, "w", var_new_int(w));
-	var_add(v, "h", var_new_int(h));
+	var_t* v = var_new_obj(vm, NULL, NULL);
+	var_add(v, "w", var_new_int(vm, w));
+	var_add(v, "h", var_new_int(vm, h));
 	return v;
 }
 
@@ -248,8 +248,8 @@ var_t* native_font_genSurface(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_SURFACE, 0);
 	v->value = surface;
 	v->free_func = _free_none;
-	var_add(v, "w", var_new_int(surface->w));
-	var_add(v, "h", var_new_int(surface->h));
+	var_add(v, "w", var_new_int(vm, surface->w));
+	var_add(v, "h", var_new_int(vm, surface->h));
 	return v;
 }
 
@@ -282,8 +282,8 @@ var_t* native_font_genTexture(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_TEXTURE, 0);
 	v->value = tex;
 	v->free_func = _free_none;
-	var_add(v, "w", var_new_int(surface->w));
-	var_add(v, "h", var_new_int(surface->h));
+	var_add(v, "w", var_new_int(vm, surface->w));
+	var_add(v, "h", var_new_int(vm, surface->h));
 	SDL_FreeSurface(surface);
 	return v;
 }
@@ -304,8 +304,8 @@ var_t* native_surface_genTexture(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_TEXTURE, 0);
 	v->value = tex;
 	v->free_func = _free_none;
-	var_add(v, "w", var_new_int(surface->w));
-	var_add(v, "h", var_new_int(surface->h));
+	var_add(v, "w", var_new_int(vm, surface->w));
+	var_add(v, "h", var_new_int(vm, surface->h));
 	return v;
 }
 
@@ -690,8 +690,8 @@ var_t* native_image_loadSurface(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_SURFACE, 0);
 	v->value = surface;
 	v->free_func = _free_none;
-	var_add(v, "w", var_new_int(surface->w));
-	var_add(v, "h", var_new_int(surface->h));
+	var_add(v, "w", var_new_int(vm, surface->w));
+	var_add(v, "h", var_new_int(vm, surface->h));
 	return v;
 }
 
@@ -716,8 +716,8 @@ var_t* native_image_loadTexture(vm_t* vm, var_t* env, void *data) {
 	var_t* v = new_obj(vm, CLS_TEXTURE, 0);
 	v->value = tex;
 	v->free_func = _free_none;
-	var_add(v, "w", var_new_int(surface->w));
-	var_add(v, "h", var_new_int(surface->h));
+	var_add(v, "w", var_new_int(vm, surface->w));
+	var_add(v, "h", var_new_int(vm, surface->h));
 	SDL_FreeSurface(surface);
 	return v;
 }
@@ -725,17 +725,17 @@ var_t* native_image_loadTexture(vm_t* vm, var_t* env, void *data) {
 //Rect
 var_t* native_rect_constructor(vm_t* vm, var_t* env, void* data) {
 	(void)vm; (void)data;
-	var_t* thisV = var_new_obj(NULL, NULL);
+	var_t* thisV = var_new_obj(vm, NULL, NULL);
 
 	int x = get_int(env, "x");
 	int y = get_int(env, "y");
 	int w = get_int(env, "w");
 	int h = get_int(env, "h");
 	
-	var_add(thisV, "x", var_new_int(x));
-	var_add(thisV, "y", var_new_int(y));
-	var_add(thisV, "w", var_new_int(w));
-	var_add(thisV, "h", var_new_int(h));
+	var_add(thisV, "x", var_new_int(vm, x));
+	var_add(thisV, "y", var_new_int(vm, y));
+	var_add(thisV, "w", var_new_int(vm, w));
+	var_add(thisV, "h", var_new_int(vm, h));
 
   var_instance_from(thisV, get_obj(env, THIS));
 	return thisV;
@@ -744,13 +744,13 @@ var_t* native_rect_constructor(vm_t* vm, var_t* env, void* data) {
 //Size
 var_t* native_size_constructor(vm_t* vm, var_t* env, void* data) {
 	(void)vm; (void)data;
-	var_t* thisV = var_new_obj(NULL, NULL);
+	var_t* thisV = var_new_obj(vm, NULL, NULL);
 
 	int w = get_int(env, "w");
 	int h = get_int(env, "h");
 	
-	var_add(thisV, "w", var_new_int(w));
-	var_add(thisV, "h", var_new_int(h));
+	var_add(thisV, "w", var_new_int(vm, w));
+	var_add(thisV, "h", var_new_int(vm, h));
 
   var_instance_from(thisV, get_obj(env, THIS));
 	return thisV;
@@ -759,13 +759,13 @@ var_t* native_size_constructor(vm_t* vm, var_t* env, void* data) {
 //Pos
 var_t* native_pos_constructor(vm_t* vm, var_t* env, void* data) {
 	(void)vm; (void)data;
-	var_t* thisV = var_new_obj(NULL, NULL);
+	var_t* thisV = var_new_obj(vm, NULL, NULL);
 
 	int x = get_int(env, "x");
 	int y = get_int(env, "y");
 	
-	var_add(thisV, "x", var_new_int(x));
-	var_add(thisV, "y", var_new_int(y));
+	var_add(thisV, "x", var_new_int(vm, x));
+	var_add(thisV, "y", var_new_int(vm, y));
 	
   var_instance_from(thisV, get_obj(env, THIS));
 	return thisV;
@@ -793,12 +793,12 @@ void reg_native_sdl(vm_t* vm) {
 	vm_reg_native(vm, CLS_SIZE, "constructor(w, h)", native_size_constructor, NULL);
 
 	//Event
-	vm_reg_var(vm, CLS_EVENT, "NONE", var_new_int(0), true);
-	vm_reg_var(vm, CLS_EVENT, "QUIT", var_new_int(SDL_QUIT), true);
-	vm_reg_var(vm, CLS_EVENT, "KEY_UP", var_new_int(SDL_KEYUP), true);
-	vm_reg_var(vm, CLS_EVENT, "KEY_DOWN", var_new_int(SDL_KEYDOWN), true);
-	vm_reg_var(vm, CLS_EVENT, "TEXT_INPUT", var_new_int(SDL_TEXTINPUT), true);
-	vm_reg_var(vm, CLS_EVENT, "TEXT_EDITING", var_new_int(SDL_TEXTEDITING), true);
+	vm_reg_var(vm, CLS_EVENT, "NONE", var_new_int(vm, 0), true);
+	vm_reg_var(vm, CLS_EVENT, "QUIT", var_new_int(vm, SDL_QUIT), true);
+	vm_reg_var(vm, CLS_EVENT, "KEY_UP", var_new_int(vm, SDL_KEYUP), true);
+	vm_reg_var(vm, CLS_EVENT, "KEY_DOWN", var_new_int(vm, SDL_KEYDOWN), true);
+	vm_reg_var(vm, CLS_EVENT, "TEXT_INPUT", var_new_int(vm, SDL_TEXTINPUT), true);
+	vm_reg_var(vm, CLS_EVENT, "TEXT_EDITING", var_new_int(vm, SDL_TEXTEDITING), true);
 	vm_reg_static(vm, CLS_EVENT, "pollEvent()", native_sdl_pollEvent, NULL);
 	vm_reg_static(vm, CLS_EVENT, "startTextInput()", native_sdl_startTextInput, NULL);
 	vm_reg_static(vm, CLS_EVENT, "stopTextInput()", native_sdl_stopTextInput, NULL);

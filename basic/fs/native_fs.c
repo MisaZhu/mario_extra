@@ -25,7 +25,7 @@ var_t* native_fs_open(vm_t* vm, var_t* env, void* data) {
 	int flags = get_int(env, "flags");
 
 	int res = open(fname, flags);
-	return var_new_int(res);
+	return var_new_int(vm, res);
 }
 
 var_t* native_fs_write(vm_t* vm, var_t* env, void* data) {
@@ -47,7 +47,7 @@ var_t* native_fs_write(vm_t* vm, var_t* env, void* data) {
 		size = bytesSize;
 
 	int res = write(fd, (const char*)bytes->value, size);
-	return var_new_int(res);
+	return var_new_int(vm, res);
 }
 
 var_t* native_fs_read(vm_t* vm, var_t* env, void* data) {
@@ -71,15 +71,15 @@ var_t* native_fs_read(vm_t* vm, var_t* env, void* data) {
 	if(res >= 0)
 		s[res] = 0;
 
-	return var_new_int(res);
+	return var_new_int(vm, res);
 }
 
 #define CLS_FS "FS"
 
 void reg_native_fs(vm_t* vm) {
-	vm_reg_var(vm, CLS_FS, "RDONLY", var_new_int(O_RDONLY), true);
-	vm_reg_var(vm, CLS_FS, "WRONLY", var_new_int(O_WRONLY), true);
-	vm_reg_var(vm, CLS_FS, "RDWR", var_new_int(O_RDWR), true);
+	vm_reg_var(vm, CLS_FS, "RDONLY", var_new_int(vm, O_RDONLY), true);
+	vm_reg_var(vm, CLS_FS, "WRONLY", var_new_int(vm, O_WRONLY), true);
+	vm_reg_var(vm, CLS_FS, "RDWR", var_new_int(vm, O_RDWR), true);
 
 	vm_reg_static(vm, CLS_FS, "close(fd)", native_fs_close, NULL);
 	vm_reg_static(vm, CLS_FS, "open(fname, flags)", native_fs_open, NULL);

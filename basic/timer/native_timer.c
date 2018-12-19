@@ -29,7 +29,7 @@ typedef struct st_js_timer {
 js_timer_t* new_js_timer(vm_t* vm) {
 	js_timer_t* ret =  (js_timer_t*)_malloc(sizeof(js_timer_t));
 	memset(ret, 0, sizeof(js_timer_t));
-	var_t* v = var_new_obj(ret, NULL);
+	var_t* v = var_new_obj(vm, ret, NULL);
 	var_add(vm->root, "__timer", v);
 	return ret;
 }
@@ -66,8 +66,8 @@ void cancelTimer(vm_t* vm, int id) {
 	pthread_mutex_lock(&js_timer->timerLocker);
 	if(js_timer->timers[id].msec == 0) {
 		js_timer->timers[id].msec = 0;
-		var_unref(js_timer->timers[id].env, true);
-		var_unref(js_timer->timers[id].callback, true);
+		var_unref(js_timer->timers[id].env);
+		var_unref(js_timer->timers[id].callback);
 	}
 	pthread_mutex_unlock(&js_timer->timerLocker);
 }
@@ -87,8 +87,8 @@ void tryTimers(vm_t* vm) {
 
 			if(!js_timer->timers[i].repeat) {
 				js_timer->timers[i].msec = 0;
-				var_unref(js_timer->timers[i].callback, true);
-				var_unref(js_timer->timers[i].env, true);
+				var_unref(js_timer->timers[i].callback);
+				var_unref(js_timer->timers[i].env);
 			}
 		}
 	}
@@ -118,9 +118,8 @@ var_t* native_timer_set(vm_t* vm, var_t* env, void* data) {
 	var_t* callback = get_obj(env, "callback");
 
 	js_timer_t* js_timer = get_js_timer(vm);
-	vm_mark_func_scopes(vm, callback);
 	int id = setTimer(js_timer, msec, repeat, env, callback);
-	return var_new_int(id);
+	return var_new_int(vm, id);
 }
 
 var_t* native_timer_cancel(vm_t* vm, var_t* env, void* data) {

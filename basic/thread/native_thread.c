@@ -33,14 +33,14 @@ var_t* native_thread_run(vm_t* vm, var_t* env, void* data) {
 		return NULL;
 	}
 
-	var_t* vmain = var_new_obj(vm, _free_none);
+	var_t* vmain = var_new_obj(vm_thread, vm, _free_none);
   var_instance_from(vmain, get_obj(env, THIS));
 	var_add(vm_thread->root, "_fatherThread", vmain);
 
 	pthread_t pid;
 	pthread_create(&pid, NULL, threadThread, vm_thread);
 
-	var_t* vthread = var_new_obj(vm_thread, _free_none);
+	var_t* vthread = var_new_obj(vm, vm_thread, _free_none);
   var_instance_from(vthread, get_obj(env, THIS));
 	return vthread;
 }
@@ -59,12 +59,12 @@ var_t* native_thread_send_message(vm_t* vm, var_t* env, void* data) {
 		return NULL;
 	
 	const char* s = get_str(env, "s");
-	var_t* args = var_new();
-	var_add(args, "", var_new_str(s));
+	var_t* args = var_new(vm);
+	var_add(args, "", var_new_str(vm, s));
 
 	var_t* thread_obj = get_obj(vm_thread->root, "_thread");
 	if(thread_obj == NULL) {
-		var_unref(args, true);
+		var_unref(args);
 		return NULL;
 	}
 

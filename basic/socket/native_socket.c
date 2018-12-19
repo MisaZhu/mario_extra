@@ -25,7 +25,7 @@ var_t* native_socket_socket(vm_t* vm, var_t* env, void* data) {
 		fd = socket(PF_INET, SOCK_DGRAM, 0);
 	}
 
-	return var_new_int(fd);
+	return var_new_int(vm, fd);
 }
 
 var_t* native_socket_close(vm_t* vm, var_t* env, void* data) {
@@ -55,7 +55,7 @@ var_t* native_socket_connect(vm_t* vm, var_t* env, void* data) {
 
 	int res = -1;
 	if(fd < 0 || port < 0)
-		return var_new_int(res);
+		return var_new_int(vm, res);
 
 	struct sockaddr_in addr;
 	memset(&addr, 0, sizeof(addr));
@@ -93,7 +93,7 @@ var_t* native_socket_connect(vm_t* vm, var_t* env, void* data) {
 		ioctl(fd, FIONBIO, &ul);
 	}
 
-	return var_new_int(res);
+	return var_new_int(vm, res);
 }
 
 var_t* native_socket_bind(vm_t* vm, var_t* env, void* data) {
@@ -105,7 +105,7 @@ var_t* native_socket_bind(vm_t* vm, var_t* env, void* data) {
 
 	int res = -1;
 	if(fd < 0 || port <= 0) 
-		return var_new_int(res);
+		return var_new_int(vm, res);
 
 	struct sockaddr_in addr;
 	memset(&addr, 0, sizeof(addr));
@@ -115,7 +115,7 @@ var_t* native_socket_bind(vm_t* vm, var_t* env, void* data) {
 		addr.sin_addr.s_addr = inet_addr(host);
 
 	res = bind(fd, (struct sockaddr *)&addr, sizeof(struct sockaddr));
-	return var_new_int(res);
+	return var_new_int(vm, res);
 }
 
 var_t* native_socket_accept(vm_t* vm, var_t* env, void* data) {
@@ -128,7 +128,7 @@ var_t* native_socket_accept(vm_t* vm, var_t* env, void* data) {
 	socklen_t size = sizeof(struct sockaddr);
 
 	int cid = accept(fd, (struct sockaddr *)&in, &size);
-	return var_new_int(cid);
+	return var_new_int(vm, cid);
 }
 
 var_t* native_socket_listen(vm_t* vm, var_t* env, void* data) {
@@ -138,7 +138,7 @@ var_t* native_socket_listen(vm_t* vm, var_t* env, void* data) {
 	int backlog = get_int(env, "backlog");
 
 	int res = listen(fd, backlog);
-	return var_new_int(res);
+	return var_new_int(vm, res);
 }
 
 var_t* native_socket_write(vm_t* vm, var_t* env, void* data) {
@@ -160,7 +160,7 @@ var_t* native_socket_write(vm_t* vm, var_t* env, void* data) {
 		size = bytesSize;
 
 	int res = write(fd, (const char*)bytes->value, size);
-	return var_new_int(res);
+	return var_new_int(vm, res);
 }
 
 var_t* native_socket_read(vm_t* vm, var_t* env, void* data) {
@@ -183,7 +183,7 @@ var_t* native_socket_read(vm_t* vm, var_t* env, void* data) {
 	int res = read(fd, s, size);
 	if(res >= 0)
 		s[res] = 0;
-	return var_new_int(res);
+	return var_new_int(vm, res);
 }
 
 var_t* native_socket_setTimeout(vm_t* vm, var_t* env, void* data) {
@@ -197,14 +197,14 @@ var_t* native_socket_setTimeout(vm_t* vm, var_t* env, void* data) {
 	tv_timeout.tv_usec = 0;
 
 	int res = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (void *) &tv_timeout, sizeof(struct timeval));
-	return var_new_int(res);
+	return var_new_int(vm, res);
 }
 
 #define CLS_SOCKET "Socket"
 
 void reg_native_socket(vm_t* vm) {
-	vm_reg_var(vm, CLS_SOCKET, "TCP", var_new_int(0), true);
-	vm_reg_var(vm, CLS_SOCKET, "UDP", var_new_int(1), true);
+	vm_reg_var(vm, CLS_SOCKET, "TCP", var_new_int(vm, 0), true);
+	vm_reg_var(vm, CLS_SOCKET, "UDP", var_new_int(vm, 1), true);
 
 	vm_reg_static(vm, CLS_SOCKET, "socket(type)", native_socket_socket, NULL);
 	vm_reg_static(vm, CLS_SOCKET, "close(fd)", native_socket_close, NULL);

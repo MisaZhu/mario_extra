@@ -59,16 +59,11 @@ var_t* native_thread_send_message(vm_t* vm, var_t* env, void* data) {
 		return NULL;
 	
 	const char* s = get_str(env, "s");
-	var_t* args = var_new(vm);
-	var_add(args, "", var_new_str(vm, s));
-
 	var_t* thread_obj = get_obj(vm_thread->root, "_thread");
 	if(thread_obj == NULL) {
-		var_unref(args);
 		return NULL;
 	}
-
-	interrupt_by_name(vm_thread, thread_obj, "onMessage", args);
+	interrupt_by_name(vm_thread, thread_obj, "onMessage", s);
 	return NULL;
 }
 

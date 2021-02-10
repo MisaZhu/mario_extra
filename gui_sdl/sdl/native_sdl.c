@@ -1,14 +1,15 @@
-#include "mario_vm.h"
+#include "mario.h"
 
-#include <SDL.h>
-#include <SDL2_gfxPrimitives.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+static inline void _free_none(void* p) { }
 
 /*=====gui native functions=========*/
 var_t* native_sdl_init(vm_t* vm, var_t* env, void* data) {
@@ -778,74 +779,85 @@ var_t* native_pos_constructor(vm_t* vm, var_t* env, void* data) {
 
 void reg_native_sdl(vm_t* vm) {
 	//SDL
-	vm_reg_static(vm, CLS_SDL, "init()", native_sdl_init, NULL);
-	vm_reg_static(vm, CLS_SDL, "quit()", native_sdl_quit, NULL);
-	vm_reg_static(vm, CLS_SDL, "getDisplayMode()", native_sdl_getDisplayMode, NULL);
-	vm_reg_static(vm, CLS_SDL, "createWindow(title, x, y, w, h, fullscreen)", native_sdl_createWindow, NULL);
+	var_t* cls = vm_new_class(vm, CLS_SDL);
+	vm_reg_static(vm, cls, "init()", native_sdl_init, NULL);
+	vm_reg_static(vm, cls, "quit()", native_sdl_quit, NULL);
+	vm_reg_static(vm, cls, "getDisplayMode()", native_sdl_getDisplayMode, NULL);
+	vm_reg_static(vm, cls, "createWindow(title, x, y, w, h, fullscreen)", native_sdl_createWindow, NULL);
 
 	//Rect
-	vm_reg_native(vm, CLS_RECT, "constructor(x, y, w, h)", native_rect_constructor, NULL);
+	cls = vm_new_class(vm, CLS_RECT);
+	vm_reg_native(vm, cls, "constructor(x, y, w, h)", native_rect_constructor, NULL);
 
 	//Pos
-	vm_reg_native(vm, CLS_POS, "constructor(x, y)", native_pos_constructor, NULL);
+	cls = vm_new_class(vm, CLS_POS);
+	vm_reg_native(vm, cls, "constructor(x, y)", native_pos_constructor, NULL);
 
 	//Size
-	vm_reg_native(vm, CLS_SIZE, "constructor(w, h)", native_size_constructor, NULL);
+	cls = vm_new_class(vm, CLS_SIZE);
+	vm_reg_native(vm, cls, "constructor(w, h)", native_size_constructor, NULL);
 
 	//Event
-	vm_reg_var(vm, CLS_EVENT, "NONE", var_new_int(vm, 0), true);
-	vm_reg_var(vm, CLS_EVENT, "QUIT", var_new_int(vm, SDL_QUIT), true);
-	vm_reg_var(vm, CLS_EVENT, "KEY_UP", var_new_int(vm, SDL_KEYUP), true);
-	vm_reg_var(vm, CLS_EVENT, "KEY_DOWN", var_new_int(vm, SDL_KEYDOWN), true);
-	vm_reg_var(vm, CLS_EVENT, "TEXT_INPUT", var_new_int(vm, SDL_TEXTINPUT), true);
-	vm_reg_var(vm, CLS_EVENT, "TEXT_EDITING", var_new_int(vm, SDL_TEXTEDITING), true);
-	vm_reg_static(vm, CLS_EVENT, "pollEvent()", native_sdl_pollEvent, NULL);
-	vm_reg_static(vm, CLS_EVENT, "startTextInput()", native_sdl_startTextInput, NULL);
-	vm_reg_static(vm, CLS_EVENT, "stopTextInput()", native_sdl_stopTextInput, NULL);
-	vm_reg_static(vm, CLS_EVENT, "setTextInputRect(r)", native_sdl_setTextInputRect, NULL);
+	cls = vm_new_class(vm, CLS_EVENT);
+	vm_reg_var(vm, cls, "NONE", var_new_int(vm, 0), true);
+	vm_reg_var(vm, cls, "QUIT", var_new_int(vm, SDL_QUIT), true);
+	vm_reg_var(vm, cls, "KEY_UP", var_new_int(vm, SDL_KEYUP), true);
+	vm_reg_var(vm, cls, "KEY_DOWN", var_new_int(vm, SDL_KEYDOWN), true);
+	vm_reg_var(vm, cls, "TEXT_INPUT", var_new_int(vm, SDL_TEXTINPUT), true);
+	vm_reg_var(vm, cls, "TEXT_EDITING", var_new_int(vm, SDL_TEXTEDITING), true);
+	vm_reg_static(vm, cls, "pollEvent()", native_sdl_pollEvent, NULL);
+	vm_reg_static(vm, cls, "startTextInput()", native_sdl_startTextInput, NULL);
+	vm_reg_static(vm, cls, "stopTextInput()", native_sdl_stopTextInput, NULL);
+	vm_reg_static(vm, cls, "setTextInputRect(r)", native_sdl_setTextInputRect, NULL);
 
 	//Window
-	vm_reg_native(vm, CLS_WINDOW, "destroy()", native_window_destroy, NULL);
-	vm_reg_native(vm, CLS_WINDOW, "getCanvas()", native_window_getCanvas, NULL);
+	cls = vm_new_class(vm, CLS_WINDOW);
+	vm_reg_native(vm, cls, "destroy()", native_window_destroy, NULL);
+	vm_reg_native(vm, cls, "getCanvas()", native_window_getCanvas, NULL);
 
 	//Surface
-	vm_reg_native(vm, CLS_SURFACE, "destroy()", native_surface_destroy, NULL);
-	vm_reg_native(vm, CLS_SURFACE, "genTexture(canvas)", native_surface_genTexture, NULL);
+	cls = vm_new_class(vm, CLS_SURFACE);
+	vm_reg_native(vm, cls, "destroy()", native_surface_destroy, NULL);
+	vm_reg_native(vm, cls, "genTexture(canvas)", native_surface_genTexture, NULL);
 
 	//Texture
-	vm_reg_native(vm, CLS_TEXTURE, "destroy()", native_texture_destroy, NULL);
+	cls = vm_new_class(vm, CLS_TEXTURE);
+	vm_reg_native(vm, cls, "destroy()", native_texture_destroy, NULL);
 
 	//Image
-	vm_reg_native(vm, CLS_IMAGE, "loadSurface(fname)", native_image_loadSurface, NULL);
-	vm_reg_native(vm, CLS_IMAGE, "loadTexture(canvas, fname)", native_image_loadTexture, NULL);
+	cls = vm_new_class(vm, CLS_IMAGE);
+	vm_reg_native(vm, cls, "loadSurface(fname)", native_image_loadSurface, NULL);
+	vm_reg_native(vm, cls, "loadTexture(canvas, fname)", native_image_loadTexture, NULL);
 
 	//Font
-	vm_reg_static(vm, CLS_FONT, "init()", native_font_init, NULL);
-	vm_reg_static(vm, CLS_FONT, "quit()", native_font_quit, NULL);
-	vm_reg_static(vm, CLS_FONT, "open(fname, size)", native_font_open, NULL);
-	vm_reg_native(vm, CLS_FONT, "close()", native_font_close, NULL);
-	vm_reg_native(vm, CLS_FONT, "sizeOf(text)", native_font_sizeOf, NULL);
-	vm_reg_native(vm, CLS_FONT, "genSurface(text, color)", native_font_genSurface, NULL);
-	vm_reg_native(vm, CLS_FONT, "genTexture(canvas, text, color)", native_font_genTexture, NULL);
+	cls = vm_new_class(vm, CLS_FONT);
+	vm_reg_static(vm, cls, "init()", native_font_init, NULL);
+	vm_reg_static(vm, cls, "quit()", native_font_quit, NULL);
+	vm_reg_static(vm, cls, "open(fname, size)", native_font_open, NULL);
+	vm_reg_native(vm, cls, "close()", native_font_close, NULL);
+	vm_reg_native(vm, cls, "sizeOf(text)", native_font_sizeOf, NULL);
+	vm_reg_native(vm, cls, "genSurface(text, color)", native_font_genSurface, NULL);
+	vm_reg_native(vm, cls, "genTexture(canvas, text, color)", native_font_genTexture, NULL);
 
 	//Canvas
-	vm_reg_native(vm, CLS_CANVAS, "setColor(color)", native_canvas_setColor, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "destroy()", native_canvas_destroy, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "refresh()", native_canvas_refresh, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "clear()", native_canvas_clear, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "rectangle(x1, y1, x2, y2, color)", native_canvas_rectangle, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "filledRectangle(x1, y1, x2, y2, color)", native_canvas_filledRectangle, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "roundedRectangle(x1, y1, x2, y2, rad, color)", native_canvas_roundedRectangle, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "filledRoundedRectangle(x1, y1, x2, y2, rad, color)", native_canvas_filledRoundedRectangle, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "thickLine(x1, y1, x2, y2, w, color)", native_canvas_thickLine, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "line(x1, y1, x2, y2, color)", native_canvas_line, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "aaline(x1, y1, x2, y2, color)", native_canvas_aaline, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "circle(x, y, rad, color)", native_canvas_circle, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "aacircle(x, y, rad, color)", native_canvas_aacircle, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "filledCircle(x, y, rad, color)", native_canvas_filledCircle, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "drawText(text, x, y, font, color)", native_canvas_drawText, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "copySurface(surface, srcRect, dstRect)", native_canvas_copySurface, NULL);
-	vm_reg_native(vm, CLS_CANVAS, "copyTexture(texture, srcRect, dstRect)", native_canvas_copyTexture, NULL);
+	cls = vm_new_class(vm, CLS_CANVAS);
+	vm_reg_native(vm, cls, "setColor(color)", native_canvas_setColor, NULL);
+	vm_reg_native(vm, cls, "destroy()", native_canvas_destroy, NULL);
+	vm_reg_native(vm, cls, "refresh()", native_canvas_refresh, NULL);
+	vm_reg_native(vm, cls, "clear()", native_canvas_clear, NULL);
+	vm_reg_native(vm, cls, "rectangle(x1, y1, x2, y2, color)", native_canvas_rectangle, NULL);
+	vm_reg_native(vm, cls, "filledRectangle(x1, y1, x2, y2, color)", native_canvas_filledRectangle, NULL);
+	vm_reg_native(vm, cls, "roundedRectangle(x1, y1, x2, y2, rad, color)", native_canvas_roundedRectangle, NULL);
+	vm_reg_native(vm, cls, "filledRoundedRectangle(x1, y1, x2, y2, rad, color)", native_canvas_filledRoundedRectangle, NULL);
+	vm_reg_native(vm, cls, "thickLine(x1, y1, x2, y2, w, color)", native_canvas_thickLine, NULL);
+	vm_reg_native(vm, cls, "line(x1, y1, x2, y2, color)", native_canvas_line, NULL);
+	vm_reg_native(vm, cls, "aaline(x1, y1, x2, y2, color)", native_canvas_aaline, NULL);
+	vm_reg_native(vm, cls, "circle(x, y, rad, color)", native_canvas_circle, NULL);
+	vm_reg_native(vm, cls, "aacircle(x, y, rad, color)", native_canvas_aacircle, NULL);
+	vm_reg_native(vm, cls, "filledCircle(x, y, rad, color)", native_canvas_filledCircle, NULL);
+	vm_reg_native(vm, cls, "drawText(text, x, y, font, color)", native_canvas_drawText, NULL);
+	vm_reg_native(vm, cls, "copySurface(surface, srcRect, dstRect)", native_canvas_copySurface, NULL);
+	vm_reg_native(vm, cls, "copyTexture(texture, srcRect, dstRect)", native_canvas_copyTexture, NULL);
 }
 
 #ifdef __cplusplus

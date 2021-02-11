@@ -13,5 +13,5 @@ console.log(expr.toString());
 console.log(expr.test("https://www.rokid.com"));
 
 expr = regex.reset().find("name");
-console.log(expr.toString());
+//console.log(expr.toString());
 console.log(expr.replace("Hello, name.", "master Yoda"));
